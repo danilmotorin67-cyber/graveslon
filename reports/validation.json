@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "validator": "independent brute-force event replay",
+  "results": [
+    {
+      "mode": "base",
+      "auditedBooks": 100000,
+      "rtp": 0.9619994293683,
+      "hitRate": 0.249997006663,
+      "featureOneIn": 250.0,
+      "maxWinOneIn": 10000000.0,
+      "freeGameShareOfRtp": 0.3745459951769937
+    },
+    {
+      "mode": "bonus",
+      "auditedBooks": 100000,
+      "rtp": 0.961999943566432,
+      "hitRate": 0.99908628196,
+      "featureOneIn": 1.0,
+      "maxWinOneIn": 100000.0,
+      "freeGameShareOfRtp": 0.9987239043251771
+    }
+  ],
+  "sha256": {
+    "lookUpTable_bonus_0.csv": "f6c859ada23445f381343b33841821cb9eaadc065261c329583f13d84e0a0ecd",
+    "index.json": "648419c924d7352af5cfa08d480c43b9555d0651a4c6c4cb8c089556249c4257",
+    "books_bonus.jsonl.zst": "433ff461802d42c6dc76cd560dc6b7d968d650ac027fdfecf7870133cb176f67",
+    "books_base.jsonl.zst": "a765c7394e0ccbb4bfc0a019eeebbe28318f0c900019895f1f1fd5408511c792",
+    "lookUpTable_base_0.csv": "dbc6b0e9b5fb520fd14ce43847cec9db2de5c7d500fd057ed3202185eb329ed4"
+  }
+}

@@ -1,0 +1,31 @@
+name: Math verification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: python tools/setup_sdk.py
+      - run: python tools/sdk_smoke.py
+      - run: python -m unittest discover -s tests -v
+      - run: python tools/build_math.py --count 100000 --seed 20261020
+      - run: python tools/validate_math.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: midnight-plots-math-candidate
+          retention-days: 90
+          path: |
+            games/midnight_plots/library/publish_files/
+            reports/

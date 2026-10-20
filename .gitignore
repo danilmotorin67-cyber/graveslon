@@ -1,0 +1,10 @@
+.cache/
+.venv/
+__pycache__/
+*.pyc
+*.tmp
+.env
+node_modules/
+dist/
+games/midnight_plots/library/
+tests/fixtures/
