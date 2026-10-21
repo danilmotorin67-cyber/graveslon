@@ -9,7 +9,7 @@
 /* A fixed 2:3 actor box keeps the sprite's soles on the same ground plane. */
 .mortimer-actor{position:absolute;left:0;bottom:8%;width:23%;aspect-ratio:2/3;z-index:0;pointer-events:none}
 .mortimer-actor .mortimer{position:relative;display:block;left:auto;bottom:auto;width:100%;height:100%;object-position:center bottom;transform-origin:50% 100%;z-index:2}
-.mortimer-ground{position:absolute;left:-6%;bottom:-12%;width:118%;height:auto;z-index:0}
+.mortimer-ground{position:absolute;left:-6%;bottom:-12%;width:118%;height:auto;z-index:0;opacity:.82;filter:saturate(.65) contrast(.72) brightness(.75) blur(.25px);mask-image:radial-gradient(ellipse 66% 64% at 53% 39%,#000 40%,#000b 64%,transparent 100%)}
 .mortimer-contact{position:absolute;inset:0;z-index:1;--left-x:40%;--left-y:1%;--right-x:67%;--right-y:3%}
 .mortimer-contact:before,.mortimer-contact:after{content:"";position:absolute;height:2%;background:radial-gradient(ellipse,#060707e6 10%,#06070780 45%,transparent 75%);transform:rotate(-5deg)}
 .mortimer-contact:before{left:var(--left-x);bottom:var(--left-y);width:17%}

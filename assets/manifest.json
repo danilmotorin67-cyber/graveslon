@@ -314,8 +314,8 @@
       "width": 1152,
       "height": 384,
       "mode": "RGBA",
-      "bytes": 622216,
-      "sha256": "a927209d47cd84277c067d7ac3e3f8b359af85451aff922a11562ae564f0069d"
+      "bytes": 610004,
+      "sha256": "1c38db4f296bf4f3e7cf688abef2b094a64d7c4ceb1b1602d47a0265882f7c46"
     },
     {
       "path": "runtime/ui/reel_frame.png",

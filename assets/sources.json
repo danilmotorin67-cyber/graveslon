@@ -268,7 +268,7 @@
     {
       "path": "assets/source/ground_mortimer.png",
       "role": "ground_support",
-      "sha256": "ead3df9fd2e9686e14540e7cb9de729943f958287a0b00de3991d8d6c8f10113",
+      "sha256": "fb19ca8a15b21ce666d3d0599c0f745db45ef5fa573a5de54c2fcc8552839df8",
       "size": [
         2172,
         724
@@ -276,7 +276,16 @@
       "mode": "RGBA",
       "createdAt": "2026-10-21T17:34:25.872990+00:00",
       "origin": "Built-in Imagegen, environment ground contact layer, 2026-10-21",
-      "promptStatus": "Exact prompt stored in assets/grounding-prompt-20261021.txt; environment and character references kept unchanged."
+      "promptStatus": "Exact prompt stored in assets/grounding-prompt-20261021.txt; environment and character references kept unchanged.",
+      "edits": [
+        {
+          "createdAt": "2026-10-21T17:41:55.470333+00:00",
+          "method": "Built-in Imagegen",
+          "previousSha256": "ead3df9fd2e9686e14540e7cb9de729943f958287a0b00de3991d8d6c8f10113",
+          "reason": "User requested lower ground contrast and closer integration with background",
+          "promptFile": "assets/grounding-contrast-prompt-20261021.txt"
+        }
+      ]
     }
   ]
 }

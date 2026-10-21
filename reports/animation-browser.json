@@ -50,7 +50,7 @@
   "skipToFinal": "PASS",
   "timing": {
     "cpuThrottle": 4,
-    "sampleFrames": 117,
+    "sampleFrames": 118,
     "medianFrameMs": 16.699999999999818,
     "p95FrameMs": 16.800000000000182,
     "finalTotal": 345,
@@ -62,25 +62,5 @@
   "limits": [
     "CPU throttling is a desktop emulator, not a physical midrange phone",
     "No RGS, real money, audio or platform acceptance tested"
-  ],
-  "soleAnchor": {
-    "status": "PASS",
-    "frames": [
-      {
-        "time": 0,
-        "bottom": 789.53125,
-        "transform": "matrix(1, 0, 0, 1, 0, 0)"
-      },
-      {
-        "time": 2500,
-        "bottom": 789.53125,
-        "transform": "matrix(1, 0, 0, 1.006, 0, 0)"
-      },
-      {
-        "time": 5000,
-        "bottom": 789.53125,
-        "transform": "matrix(1, 0, 0, 1, 0, 0)"
-      }
-    ]
-  }
+  ]
 }
