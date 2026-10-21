@@ -21,7 +21,7 @@ def main():
     roles={r: [a for a in items if a['role']==r] for r in {a['role'] for a in items}}
     expected={'symbol':11,'symbol_blur':11,'background':4,'character':3,
               'ui_icon':10,'frame':1,'logo':1,'win_plate':3,'bonus_overlay':2,
-              'multiplier_plate':1,'multiplier_preview':4,'cover_draft':3,'bonus_screen':2}
+              'multiplier_plate':1,'multiplier_preview':4,'cover_draft':3,'bonus_screen':2,'ground_support':1}
     require({r:len(v) for r,v in roles.items()}==expected,'Incomplete art pack')
     for a in items:
         p=ASSETS/a['path']
@@ -33,11 +33,13 @@ def main():
             require(im.mode==a['mode'],f'Mode mismatch: {p}')
             if a['role'] in ('symbol','symbol_blur'):
                 require(im.size==(384,384) and im.mode=='RGBA',f'Invalid symbol: {p}')
-            if a['role'] in ('symbol','character','ui_icon','frame','logo','win_plate','bonus_overlay','multiplier_plate','multiplier_preview'):
+            if a['role'] in ('symbol','character','ui_icon','frame','logo','win_plate','bonus_overlay','multiplier_plate','multiplier_preview','ground_support'):
                 require(im.mode=='RGBA' and im.getchannel('A').getextrema()[0]==0,f'No transparency: {p}')
                 require(im.getchannel('A').getextrema()[1]>200,f'Empty asset: {p}')
             if a['role']=='background':
                 require(im.size in ((1920,1080),(1080,1920)),f'Invalid background dimensions: {p}')
+            if a['role']=='ground_support':
+                require(im.size==(1152,384),f'Invalid ground layer dimensions: {p}')
     codes={Path(a['path']).stem.split('_')[1] for a in roles['symbol']}
     require(codes=={'L1','L2','L3','L4','H1','H2','H3','H4','M','W','S'},'GDD symbol IDs mismatch')
     source=json.loads((ASSETS/'sources.json').read_text())['assets']

@@ -264,6 +264,19 @@
       "createdAt": "2026-10-21",
       "origin": "Built-in Imagegen with recovered reference artwork",
       "promptFile": "assets/prompts-20261021.json"
+    },
+    {
+      "path": "assets/source/ground_mortimer.png",
+      "role": "ground_support",
+      "sha256": "ead3df9fd2e9686e14540e7cb9de729943f958287a0b00de3991d8d6c8f10113",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-21T17:34:25.872990+00:00",
+      "origin": "Built-in Imagegen, environment ground contact layer, 2026-10-21",
+      "promptStatus": "Exact prompt stored in assets/grounding-prompt-20261021.txt; environment and character references kept unchanged."
     }
   ]
 }

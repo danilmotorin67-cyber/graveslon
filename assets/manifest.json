@@ -308,6 +308,16 @@
       "sha256": "cbd67344373b7d44763f399c953fc9693c4d1953f7b8cac182d00e6949a9ae11"
     },
     {
+      "path": "runtime/environment/ground_mortimer.png",
+      "role": "ground_support",
+      "source": "source/ground_mortimer.png",
+      "width": 1152,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 622216,
+      "sha256": "a927209d47cd84277c067d7ac3e3f8b359af85451aff922a11562ae564f0069d"
+    },
+    {
       "path": "runtime/ui/reel_frame.png",
       "role": "frame",
       "source": "vector/reel_frame.svg",

@@ -249,6 +249,8 @@ def main():
         save(out,'backgrounds/'+source.stem+'.jpg','background','source/'+source.name,upscaled=original.width<size[0] or original.height<size[1])
     for source in sorted(SOURCE.glob('mortimer_*.png')):
         save(resize(Image.open(source).convert('RGBA'),(768,1152)),'characters/'+source.name,'character','source/'+source.name)
+    save(resize(Image.open(SOURCE/'ground_mortimer.png').convert('RGBA'),(1152,384)),
+         'environment/ground_mortimer.png','ground_support','source/ground_mortimer.png')
     logo=build_ui()
     build_covers(logo)
     build_bonus_screens()

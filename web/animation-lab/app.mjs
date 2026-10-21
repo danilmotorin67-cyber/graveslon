@@ -52,7 +52,10 @@ for(let r=0;r<5;r++){
 }
 const cellAt=p=>cells[p.reel][p.row-1];
 let currentMode='base';
-function character(pose){$('.mortimer').src=`${ROOT}characters/mortimer_${pose}.png`;}
+function character(pose){
+  $('.mortimer-actor').dataset.pose=pose;
+  $('.mortimer').src=`${ROOT}characters/mortimer_${pose}.png`;
+}
 function draw(state){
   const mode=state.gameType==='freegame'||state.phase==='bonus'?'bonus':'base';
   const bg=`${ROOT}backgrounds/bg_${mode}_landscape.jpg`;
@@ -188,7 +191,7 @@ try{
   scenarios=(await response.json()).scenarios;
   const labels={ordinary_win:'Обычный выигрыш',loss:'Без выигрыша',retrigger:'Ретриггер',multiplier_10:'Могила ×10',max_win:'Максимальный выигрыш'};
   for(const scenario of scenarios){const option=document.createElement('option');option.value=scenario.key;option.textContent=`${scenario.mode} · ${labels[scenario.label]}`;$('#scenario').append(option);}
-  const sources=[...Object.keys(FILES).flatMap(id=>[path(id),path(id,true)]),...['idle','bonus','win'].map(p=>`${ROOT}characters/mortimer_${p}.png`),...['bonus_entry','bonus_result','big_win','mega_win','epic_win'].map(p=>`${ROOT}ui/${p}.png`),...['base','bonus'].flatMap(m=>['landscape','portrait'].map(o=>`${ROOT}backgrounds/bg_${m}_${o}.jpg`))];
+  const sources=[`${ROOT}environment/ground_mortimer.png`,...Object.keys(FILES).flatMap(id=>[path(id),path(id,true)]),...['idle','bonus','win'].map(p=>`${ROOT}characters/mortimer_${p}.png`),...['bonus_entry','bonus_result','big_win','mega_win','epic_win'].map(p=>`${ROOT}ui/${p}.png`),...['base','bonus'].flatMap(m=>['landscape','portrait'].map(o=>`${ROOT}backgrounds/bg_${m}_${o}.jpg`))];
   await Promise.all(sources.map(async src=>{const im=new Image();im.src=src;await im.decode();}));
   renderer.restore(player.state);busy(false);$('#status').textContent='Готово. Выбери контрольный сценарий и нажми «Проиграть».';
   window.animationLab={player,scenarios,play,clock};
