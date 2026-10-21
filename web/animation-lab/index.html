@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Midnight Plots — Animation Lab</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./style.css"></head>
+<body>
+<header><strong>MIDNIGHT PLOTS</strong><span>Стенд анимаций · Этап 4</span><span class="tag">QA · без ставок</span></header>
+<main>
+<section class="stage" aria-label="Предпросмотр анимаций">
+  <picture class="background"><source media="(orientation:portrait)" srcset="../../assets/runtime/backgrounds/bg_base_portrait.jpg"><img id="background" src="../../assets/runtime/backgrounds/bg_base_landscape.jpg" alt=""></picture>
+  <div class="fog" aria-hidden="true"></div>
+  <img class="sky-bat" src="../../assets/runtime/symbols/sym_H2_bat.png" alt="" aria-hidden="true">
+  <img class="logo" src="../../assets/runtime/ui/logo_midnight_plots.png" alt="Midnight Plots">
+  <img class="mortimer" src="../../assets/runtime/characters/mortimer_idle.png" alt="Мортимер">
+  <div class="reels-shell"><div class="reels" id="reels"></div><svg id="lines" viewBox="0 0 500 300" preserveAspectRatio="none" aria-hidden="true"></svg><img class="frame" src="../../assets/runtime/ui/reel_frame.png" alt=""></div>
+  <div class="overlay" id="overlay" hidden><div class="overlay-inner"><img id="overlay-art" alt=""><strong id="overlay-label"></strong><div id="overlay-value"></div><small>Нажми, чтобы пропустить</small></div></div>
+  <footer class="hud"><div>ВРАЩЕНИЯ <strong id="fs">—</strong></div><div>ВЫИГРЫШ <strong id="spin-win">0.00×</strong></div><div>ИТОГ РАУНДА <strong id="total">0.00×</strong></div></footer>
+</section>
+<section class="controls" aria-label="Управление стендом">
+  <p>Готовые контрольные исходы из математических книг. Частоты сценариев здесь не отражают вероятности игры.</p>
+  <div class="toolbar"><label>Сценарий <select id="scenario" disabled></select></label><button id="play" disabled>Проиграть</button><button id="skip" disabled>Пропустить эффект</button><button id="finish" disabled>К итогу</button></div>
+  <div class="toolbar"><label><input id="turbo" type="checkbox"> Турбо ×3</label><label><input id="disabled-turbo" type="checkbox"> Запрет турбо</label><label><input id="reduced-motion" type="checkbox"> Меньше движения</label><label>Продолжить с события <input id="resume-at" type="number" min="0" value="0"></label></div>
+  <div class="status" id="status" role="status" aria-live="polite">Загрузка изображений и контрольных книг…</div>
+  <details><summary>События текущего раунда</summary><ol id="event-list"></ol></details>
+</section>
+</main>
+<script type="module" src="./app.mjs"></script>
+</body></html>

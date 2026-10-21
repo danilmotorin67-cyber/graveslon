@@ -1,0 +1,21 @@
+name: Animation event verification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  events:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/export_animation_fixtures.py
+      - run: git diff --exit-code -- web/animation-lab/fixtures.json
+      - run: node --test tests/web/book-player.test.mjs

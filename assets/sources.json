@@ -249,7 +249,8 @@
       "createdAt": "2026-10-21",
       "origin": "Built-in Imagegen: corrected lower-body anatomy after user review on 2026-10-21",
       "promptFile": "assets/prompts-20261021.json",
-      "revision": "Exactly two trouser legs and two boots; replaced superseded source retained in Git history"
+      "revision": "Exactly two trouser legs and two boots; replaced superseded source retained in Git history",
+      "revisionPromptFile": "assets/mortimer-anatomy-fix-prompt.txt"
     },
     {
       "path": "assets/source/mortimer_bonus.png",

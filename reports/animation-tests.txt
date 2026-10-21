@@ -1,0 +1,15 @@
+✔ every real QA book replays to its authoritative total, including zero and cap (39.414938ms)
+✔ resume at every event boundary restores the same final state and grave map (1110.880147ms)
+✔ graves persist beneath replacement symbols and round totals replace, not accumulate (0.484658ms)
+✔ new rounds reset grave state and free-spin counters (8.962775ms)
+✔ finish skips effects while processing every remaining event exactly once (2.270173ms)
+✔ stop interrupts cleanly and a subsequent play starts from a clean state (2.782694ms)
+✔ invalid books fail before displaying a frame; unsupported events are never silently ignored (2.191765ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1248.131909
