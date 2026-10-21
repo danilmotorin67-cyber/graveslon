@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "assets": [
+    {
+      "path": "assets/source/style_ref.png",
+      "role": "style",
+      "sha256": "76be26f4e263f71b67073640258c837235d8efc904287cfb98129f4f7d3b229c",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "createdAt": "2026-10-20T09:20:23.852914+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Готический могильщик и мрачные артефакты.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_L1_candle.png",
+      "role": "L1",
+      "sha256": "3cd1aabe7de624540fa49bd82e1e3f829a1312fd94f4db4ee595357cd4a8590b",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:20:25.348502+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Готическая чёрная свеча с зелёным пламенем.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_L2_key.png",
+      "role": "L2",
+      "sha256": "a5806ddb5979a29d55e4449da9d78db3736fa1ab55ad4a0bab95986420786496",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:20:25.942354+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Бронзовый ключ с крыльями летучей мыши.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_L3_raven.png",
+      "role": "L3",
+      "sha256": "f75d860974699ed47aedc043793cee238f41363459dde4df10a47cd71be56848",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:20:26.586235+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Одноглазый ворон с рубиновым глазом.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_L4_poison.png",
+      "role": "L4",
+      "sha256": "a21d09b8f44d5995eb191d304cbd6b64003eb1acf1039ce9a466500059bf713e",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:20:27.183178+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Старинная бутылка с зелёным зельем.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_H1_lantern.png",
+      "role": "H1",
+      "sha256": "c0c2c23a6b8d312eb3afa6a97f585822c431816660e25d68d0f8f8b953ca14d8",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:51.233427+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Готический фонарь с зелёным призрачным пламенем.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_H2_bat.png",
+      "role": "H2",
+      "sha256": "9ce72bf2c9911b7a2f1208730600849098d4af9c4a88b880c2a3373fad137543",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:52.472921+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Готическая летучая мышь-вампир.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_H3_cat.png",
+      "role": "H3",
+      "sha256": "5ad53650e5df15ac39dc2b161091f5149f62ccb554cb7768d5784520ed164c36",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:53.085013+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Лунный кот-нежить с разноцветными глазами.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_H4_widow.png",
+      "role": "H4",
+      "sha256": "237f75819cd2954e8dd44ff684b7302fcbf5d3b02a67b5b185a42764c996835a",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:53.588313+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Элегантная ведьма-вдова в траурной вуали.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_M_mortimer.png",
+      "role": "M",
+      "sha256": "8927d71e4d71961e9b84218f2077acae4833e427a36319c1f3003d3905beffb3",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:54.270965+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Мортимер, скелет-могильщик в цилиндре.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_W_hand.png",
+      "role": "W",
+      "sha256": "8ad435cb840695ab22e860c8533377c1d8160aafe6c7132ab4eab8a3b29abe6b",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:55.062000+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Скелетная рука из могильной земли.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/sym_S_coffin.png",
+      "role": "S",
+      "sha256": "b26f58d2eb88c13a86d6e07574966907294e18b800dd0ce0605c2f4edcedc071",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:56.522144+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Скованный фиолетовым сиянием гроб.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/bg_base_landscape.png",
+      "role": "base_landscape",
+      "sha256": "3ab47472aa12fcbc0201841ffbf0e5208e1bb6b792f027ae70eb04b6f59c9926",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "createdAt": "2026-10-20T09:36:58.201922+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Полуночное кладбище в лунном тумане.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/bg_base_portrait.png",
+      "role": "base_portrait",
+      "sha256": "df707231e99b7db835765b9c2046d74f05be03909bc1d81b3a80ff04e1ef8a06",
+      "size": [
+        941,
+        1672
+      ],
+      "mode": "RGB",
+      "createdAt": "2026-10-20T09:36:59.025135+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Лунный туман над готическим кладбищем.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/mortimer_idle.png",
+      "role": "idle",
+      "sha256": "1104a343eca3725493d82e9dc882e26b4b2ebc05b1b5e09dec693d9a4831e521",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-20T09:36:59.588398+00:00",
+      "origin": "Recovered original image from 2026-10-20 session",
+      "originalName": "Мортимер с лопатой и зелёным фонарём.png",
+      "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    }
+  ]
+}
