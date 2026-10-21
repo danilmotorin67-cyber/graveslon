@@ -21,6 +21,8 @@ async function audit(browser,{baseURL='http://127.0.0.1:8765',outputDir}={}){
         await lab.play();
         results.push({key:scenario.key,actual:lab.player.state.total,expected:scenario.book.payoutMultiplier,phase:lab.player.state.phase});
       }
+      // Cached images still decode asynchronously after instant event playback.
+      await Promise.all([...document.images].filter(im=>im.src).map(im=>im.decode().catch(()=>{})));
       return {results,overflow:document.documentElement.scrollWidth>innerWidth,
         panelOverlap:document.querySelector('.reels-shell').getBoundingClientRect().bottom>document.querySelector('.hud').getBoundingClientRect().top,
         badImages:[...document.images].filter(im=>im.src&&!im.complete||im.src&&im.naturalWidth===0).map(im=>im.src),
