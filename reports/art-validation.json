@@ -2,7 +2,7 @@
   "status": "PASS",
   "sourceFiles": 19,
   "runtimeAssets": 56,
-  "runtimeBytes": 14362669,
+  "runtimeBytes": 14351671,
   "roleCounts": {
     "symbol": 11,
     "symbol_blur": 11,
@@ -36,5 +36,5 @@
     "Recovered original prompts are unavailable",
     "Base backgrounds and bonus backgrounds are upscaled exports; source pixels retained"
   ],
-  "publication": "Blocked pending explicit user authorization to push artwork to public GitHub"
+  "publication": "User explicitly authorized publishing corrected artwork and project changes to graveslon on 2026-10-21"
 }

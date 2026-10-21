@@ -50,7 +50,7 @@ def main():
             'checks':['Source and runtime SHA-256','All 11 GDD symbol codes','Dimensions, formats, real transparency','Full guide art inventory, with three cover drafts'],
             'visualReview':['All 11 symbols reviewed at 120 px in colour and grayscale','Desktop and portrait static layouts','Three poses: two arms, two legs, no cropped hat or boots','Base/bonus backgrounds preserve scene layout'],
             'limitations':['Art-stage candidate only; no animation, audio or playable frontend','Cover dimensions await the Engine dashboard','Recovered original prompts are unavailable','Base backgrounds and bonus backgrounds are upscaled exports; source pixels retained'],
-            'publication':'Blocked pending explicit user authorization to push artwork to public GitHub'}
+            'publication':'User explicitly authorized publishing corrected artwork and project changes to graveslon on 2026-10-21'}
     (ROOT/'reports/art-validation.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 

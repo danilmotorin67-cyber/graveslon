@@ -240,15 +240,16 @@
     {
       "path": "assets/source/mortimer_win.png",
       "role": "win",
-      "sha256": "c47c50eb16e911d4139b058543e57df68894f068d5bd809927261e8407faabb4",
+      "sha256": "638fc18ab017d6fb7308dcc4a80bbd9fa89339d1c2186693ad576c788e8c614e",
       "size": [
         1024,
         1536
       ],
       "mode": "RGBA",
       "createdAt": "2026-10-21",
-      "origin": "Built-in Imagegen with recovered reference artwork",
-      "promptFile": "assets/prompts-20261021.json"
+      "origin": "Built-in Imagegen: corrected lower-body anatomy after user review on 2026-10-21",
+      "promptFile": "assets/prompts-20261021.json",
+      "revision": "Exactly two trouser legs and two boots; replaced superseded source retained in Git history"
     },
     {
       "path": "assets/source/mortimer_bonus.png",

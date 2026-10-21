@@ -304,8 +304,8 @@
       "width": 768,
       "height": 1152,
       "mode": "RGBA",
-      "bytes": 1251599,
-      "sha256": "2365be248db1c439006d45121ad3880eecbf756d927c93fc330b9b4b87346dba"
+      "bytes": 1226088,
+      "sha256": "cbd67344373b7d44763f399c953fc9693c4d1953f7b8cac182d00e6949a9ae11"
     },
     {
       "path": "runtime/ui/reel_frame.png",
@@ -545,8 +545,8 @@
       "width": 1200,
       "height": 800,
       "mode": "RGB",
-      "bytes": 400875,
-      "sha256": "26f4bc69de4f9ea0623980845f0f037c7fff0bcc8f23289f266e786ccdec7a87",
+      "bytes": 415388,
+      "sha256": "f7dbeace72fb59d7bbc1aa33b369390585d8ec6efc88a72fbe9d8b6b2fa69643",
       "dashboardSizeConfirmed": false
     },
     {
