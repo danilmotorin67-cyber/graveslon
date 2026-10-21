@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "sourceFiles": 19,
+  "runtimeAssets": 56,
+  "runtimeBytes": 14362669,
+  "roleCounts": {
+    "symbol": 11,
+    "symbol_blur": 11,
+    "background": 4,
+    "character": 3,
+    "ui_icon": 10,
+    "frame": 1,
+    "logo": 1,
+    "win_plate": 3,
+    "bonus_overlay": 2,
+    "multiplier_plate": 1,
+    "multiplier_preview": 4,
+    "cover_draft": 3,
+    "bonus_screen": 2
+  },
+  "checks": [
+    "Source and runtime SHA-256",
+    "All 11 GDD symbol codes",
+    "Dimensions, formats, real transparency",
+    "Full guide art inventory, with three cover drafts"
+  ],
+  "visualReview": [
+    "All 11 symbols reviewed at 120 px in colour and grayscale",
+    "Desktop and portrait static layouts",
+    "Three poses: two arms, two legs, no cropped hat or boots",
+    "Base/bonus backgrounds preserve scene layout"
+  ],
+  "limitations": [
+    "Art-stage candidate only; no animation, audio or playable frontend",
+    "Cover dimensions await the Engine dashboard",
+    "Recovered original prompts are unavailable",
+    "Base backgrounds and bonus backgrounds are upscaled exports; source pixels retained"
+  ],
+  "publication": "Blocked pending explicit user authorization to push artwork to public GitHub"
+}

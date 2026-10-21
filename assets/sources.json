@@ -210,6 +210,58 @@
       "origin": "Recovered original image from 2026-10-20 session",
       "originalName": "Мортимер с лопатой и зелёным фонарём.png",
       "promptStatus": "Exact original generation prompt not recovered; see docs/ART.md for current art direction."
+    },
+    {
+      "path": "assets/source/bg_bonus_landscape.png",
+      "role": "bonus_landscape",
+      "sha256": "cf9dd32df3908a38c8d6fbe4f900b8fe3b7dd0ce741923f301df7ea67937e5ea",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "createdAt": "2026-10-21",
+      "origin": "Built-in Imagegen with recovered reference artwork",
+      "promptFile": "assets/prompts-20261021.json"
+    },
+    {
+      "path": "assets/source/bg_bonus_portrait.png",
+      "role": "bonus_portrait",
+      "sha256": "814346b171ed4ebf04da8069ecc276df2db0aa11c1e7ab1a62f48bbf84ce6c56",
+      "size": [
+        941,
+        1672
+      ],
+      "mode": "RGB",
+      "createdAt": "2026-10-21",
+      "origin": "Built-in Imagegen with recovered reference artwork",
+      "promptFile": "assets/prompts-20261021.json"
+    },
+    {
+      "path": "assets/source/mortimer_win.png",
+      "role": "win",
+      "sha256": "c47c50eb16e911d4139b058543e57df68894f068d5bd809927261e8407faabb4",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-21",
+      "origin": "Built-in Imagegen with recovered reference artwork",
+      "promptFile": "assets/prompts-20261021.json"
+    },
+    {
+      "path": "assets/source/mortimer_bonus.png",
+      "role": "bonus",
+      "sha256": "753036d5bed27c3509c300d9408d7ef64423a67e0ac4cc4fa7fd19915ed75b1a",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-21",
+      "origin": "Built-in Imagegen with recovered reference artwork",
+      "promptFile": "assets/prompts-20261021.json"
     }
   ]
 }

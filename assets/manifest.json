@@ -1,0 +1,584 @@
+{
+  "schema": 1,
+  "scope": "Art exports only; no game outcomes or RGS implementation",
+  "assets": [
+    {
+      "path": "runtime/symbols/sym_H1_lantern.png",
+      "role": "symbol",
+      "source": "source/sym_H1_lantern.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 129670,
+      "sha256": "967c2fff6d0d0549eafc73d36e8f41154e07848612c883a22144049744a75ea7"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_H1_lantern.png",
+      "role": "symbol_blur",
+      "source": "source/sym_H1_lantern.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 84197,
+      "sha256": "65de606d0a705c6b5a6b84f96433635332cc0323ca896eab490055a67df432ee",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_H2_bat.png",
+      "role": "symbol",
+      "source": "source/sym_H2_bat.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 186273,
+      "sha256": "5a6c635ffc795cf07c9c8a70ad1593085b83cc7744091fc35d5cbccc4daef644"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_H2_bat.png",
+      "role": "symbol_blur",
+      "source": "source/sym_H2_bat.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 129897,
+      "sha256": "2efa7f2f63f0b1e501a1189d0384ae9b6794fd020dcfee76a5be0a59e68d93cb",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_H3_cat.png",
+      "role": "symbol",
+      "source": "source/sym_H3_cat.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 232810,
+      "sha256": "4822ea4ce6245ba38faf5d7098d8bec67973d2ac0d3edb2dea5a6d3d17655e56"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_H3_cat.png",
+      "role": "symbol_blur",
+      "source": "source/sym_H3_cat.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 158192,
+      "sha256": "2082a09f57ce3640b8792e347c1737736edecfe087965cbc6a7ea4b66e05d4cd",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_H4_widow.png",
+      "role": "symbol",
+      "source": "source/sym_H4_widow.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 283700,
+      "sha256": "6831cb52b51b989557fc646e9d878cd1db6fb919b531235ab57efda9cb77ad2c"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_H4_widow.png",
+      "role": "symbol_blur",
+      "source": "source/sym_H4_widow.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 157822,
+      "sha256": "af201a9b6644a295165380894585fdd0f88a56123178803bfa7f82b9a7954f6e",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_L1_candle.png",
+      "role": "symbol",
+      "source": "source/sym_L1_candle.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 163867,
+      "sha256": "8616312fea821899c866d431e66e47cad994b030ba1134beb4f24876c74be7d1"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_L1_candle.png",
+      "role": "symbol_blur",
+      "source": "source/sym_L1_candle.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 102656,
+      "sha256": "ac474e032a4fe0de80b0d6137531f406cb7f16817f9d6de27c53a3c6c6a0821c",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_L2_key.png",
+      "role": "symbol",
+      "source": "source/sym_L2_key.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 124828,
+      "sha256": "8cbb1d76d98e18c4f019607e863cc7f8ba70d061a6d4294560815e304313fbb6"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_L2_key.png",
+      "role": "symbol_blur",
+      "source": "source/sym_L2_key.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 107694,
+      "sha256": "a461f0adbd8a26941822c1a9a9f2d4b9455f2ddfba159af8fac1fe88a2c9306b",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_L3_raven.png",
+      "role": "symbol",
+      "source": "source/sym_L3_raven.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 187461,
+      "sha256": "b20a3ca5eb83df62e60e5c74fbf61001d4d226d61dccd3d812c49ca18fe4b14d"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_L3_raven.png",
+      "role": "symbol_blur",
+      "source": "source/sym_L3_raven.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 110236,
+      "sha256": "8631f7b83fe83960697d8f10db70aa47adcef39efdc88424d1e4e0eaee32c221",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_L4_poison.png",
+      "role": "symbol",
+      "source": "source/sym_L4_poison.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 164377,
+      "sha256": "07d8003a7f49f35041338788db85df899d823be1de8d046c643e184757a2b2ae"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_L4_poison.png",
+      "role": "symbol_blur",
+      "source": "source/sym_L4_poison.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 103562,
+      "sha256": "4f937ca88bc8405c6da0b1c276c08feff6df7c3af0b13d87560ace993e4510b2",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_M_mortimer.png",
+      "role": "symbol",
+      "source": "source/sym_M_mortimer.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 251679,
+      "sha256": "cb3b71dfc0d654e8eaf6acb4f2f5e134ce08bc10c86ec7360f764e295e3c1577"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_M_mortimer.png",
+      "role": "symbol_blur",
+      "source": "source/sym_M_mortimer.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 169601,
+      "sha256": "57853182c8497f3885bb1e18d21916dc07ffe44f160bc1463a62c4789b4e38aa",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_S_coffin.png",
+      "role": "symbol",
+      "source": "source/sym_S_coffin.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 187746,
+      "sha256": "b954b93ebabae3c3c3d15428a56fcab596c95565dcb85c207a0f6a2a126ab0ca"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_S_coffin.png",
+      "role": "symbol_blur",
+      "source": "source/sym_S_coffin.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 108448,
+      "sha256": "303708c50493d8edbd32f6d5bc914e99115511bc23d7fbeed8940fc0fc9a5186",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/symbols/sym_W_hand.png",
+      "role": "symbol",
+      "source": "source/sym_W_hand.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 210457,
+      "sha256": "b5fa4bf53dfeee8bf8a1f2e77424bcc469007c894290f0af039a1f68fd2282f8"
+    },
+    {
+      "path": "runtime/symbols_blur/sym_W_hand.png",
+      "role": "symbol_blur",
+      "source": "source/sym_W_hand.png",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "bytes": 147753,
+      "sha256": "40738ee2eb930add256bb8a21616654d31bd30ef29215b8991d881b71562b0a4",
+      "blurKernel": 41
+    },
+    {
+      "path": "runtime/backgrounds/bg_base_landscape.jpg",
+      "role": "background",
+      "source": "source/bg_base_landscape.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "bytes": 615353,
+      "sha256": "503da7dc515ee9303fdd44c5078aec5d31347131aa2359f791618d003609cc2a",
+      "upscaled": true
+    },
+    {
+      "path": "runtime/backgrounds/bg_base_portrait.jpg",
+      "role": "background",
+      "source": "source/bg_base_portrait.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "bytes": 536809,
+      "sha256": "0d8652ee7a747871be2f57b4c2462a9db13860e12b4f14dee5dbcb40cc9d6d0f",
+      "upscaled": true
+    },
+    {
+      "path": "runtime/backgrounds/bg_bonus_landscape.jpg",
+      "role": "background",
+      "source": "source/bg_bonus_landscape.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "bytes": 669174,
+      "sha256": "57b428a8d9047e4b1d9c1d3b51962026b5033cc8bd44d8df5091c709144719e9",
+      "upscaled": true
+    },
+    {
+      "path": "runtime/backgrounds/bg_bonus_portrait.jpg",
+      "role": "background",
+      "source": "source/bg_bonus_portrait.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "bytes": 628379,
+      "sha256": "00f33b510ed9cc4148b41fac344d42e01aa8fc33144819aefe2ef89a56ef5fb6",
+      "upscaled": true
+    },
+    {
+      "path": "runtime/characters/mortimer_bonus.png",
+      "role": "character",
+      "source": "source/mortimer_bonus.png",
+      "width": 768,
+      "height": 1152,
+      "mode": "RGBA",
+      "bytes": 1265602,
+      "sha256": "2c032746cf5f09c4e3fb496b809f57622d58fc826a69151f2d5938ca4fc5a99c"
+    },
+    {
+      "path": "runtime/characters/mortimer_idle.png",
+      "role": "character",
+      "source": "source/mortimer_idle.png",
+      "width": 768,
+      "height": 1152,
+      "mode": "RGBA",
+      "bytes": 1088705,
+      "sha256": "ecd297a04b07f9424b0996180b5afcfa61770f19cf9308c185eca97c239deb94"
+    },
+    {
+      "path": "runtime/characters/mortimer_win.png",
+      "role": "character",
+      "source": "source/mortimer_win.png",
+      "width": 768,
+      "height": 1152,
+      "mode": "RGBA",
+      "bytes": 1251599,
+      "sha256": "2365be248db1c439006d45121ad3880eecbf756d927c93fc330b9b4b87346dba"
+    },
+    {
+      "path": "runtime/ui/reel_frame.png",
+      "role": "frame",
+      "source": "vector/reel_frame.svg",
+      "width": 1280,
+      "height": 752,
+      "mode": "RGBA",
+      "bytes": 29653,
+      "sha256": "3257fcdf08dd54fb6666d21fb53af08678ec73ee5c10737fa4bcd689e51bb9a7"
+    },
+    {
+      "path": "runtime/ui/logo_midnight_plots.png",
+      "role": "logo",
+      "source": "vector/logo_midnight_plots.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 44964,
+      "sha256": "ac4d82bef80f43279e46cec9f1128ad3cf3aabe96fd8b758cc59365c892b4d43"
+    },
+    {
+      "path": "runtime/ui/big_win.png",
+      "role": "win_plate",
+      "source": "vector/big_win.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 49981,
+      "sha256": "7f4af7a0f0a44412f16ad436f92d1a662cb00feae7b8e7d52d44fae80c5c3a14"
+    },
+    {
+      "path": "runtime/ui/mega_win.png",
+      "role": "win_plate",
+      "source": "vector/mega_win.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 54006,
+      "sha256": "d9babd788b567f62dc890d6aa35ef730f856358c8e05bea494b8405c332c25ac"
+    },
+    {
+      "path": "runtime/ui/epic_win.png",
+      "role": "win_plate",
+      "source": "vector/epic_win.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 49588,
+      "sha256": "05cc4823d8c3f4b56b399a456c08fc7381e4303414962b753400ebc32f94c181"
+    },
+    {
+      "path": "runtime/ui/bonus_entry.png",
+      "role": "bonus_overlay",
+      "source": "vector/bonus_entry.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 64440,
+      "sha256": "5d7d8b584c345a0695b17c7172f6473d3b21c227f356e6870d68c0fec9865567"
+    },
+    {
+      "path": "runtime/ui/bonus_result.png",
+      "role": "bonus_overlay",
+      "source": "vector/bonus_result.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 67176,
+      "sha256": "9fe9494d267b1e05f085c10ae8a70cd69867c4a228ef2e938e833fb90c9b6e43"
+    },
+    {
+      "path": "runtime/ui/grave_plate.png",
+      "role": "multiplier_plate",
+      "source": "vector/grave_plate.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 17834,
+      "sha256": "09d1f7a510c0e234876ac5cd69fe234e725e4f78de189c3580442d673913cfa1"
+    },
+    {
+      "path": "runtime/ui/grave_x2.png",
+      "role": "multiplier_preview",
+      "source": "vector/grave_x2.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 21955,
+      "sha256": "41cba7b0d1518dad9bee77b3a877bd3349f0e225e1d8298b811da33a61c8960f"
+    },
+    {
+      "path": "runtime/ui/grave_x3.png",
+      "role": "multiplier_preview",
+      "source": "vector/grave_x3.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 22996,
+      "sha256": "8d5b1ff74c968e8ef6465114d7f5576c1ad688ea3cf33ea578d81b057ae64daf"
+    },
+    {
+      "path": "runtime/ui/grave_x5.png",
+      "role": "multiplier_preview",
+      "source": "vector/grave_x5.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 21897,
+      "sha256": "6262859adb484994f3a84f996f9cde12e98dd8702878fdcd4f27ace2d44f1e7a"
+    },
+    {
+      "path": "runtime/ui/grave_x10.png",
+      "role": "multiplier_preview",
+      "source": "vector/grave_x10.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 23165,
+      "sha256": "4478a667f9573e4f9649b52f30dd75d2588a5d8b7e3221f344fef608ebfdddc3"
+    },
+    {
+      "path": "runtime/ui/icon_spin.png",
+      "role": "ui_icon",
+      "source": "vector/icon_spin.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 46736,
+      "sha256": "fe5630b1a44d770c296d6c9e196771d5808c86642c27df460f5d9380aab647c7"
+    },
+    {
+      "path": "runtime/ui/icon_autoplay.png",
+      "role": "ui_icon",
+      "source": "vector/icon_autoplay.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 53373,
+      "sha256": "af76330480046ed85d74a9a4dd8931c62e9ff06b48af91eb7655fb32bf030335"
+    },
+    {
+      "path": "runtime/ui/icon_turbo.png",
+      "role": "ui_icon",
+      "source": "vector/icon_turbo.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 43271,
+      "sha256": "d5f0302b9cc45887359b7e0e94693f65c005017957e5c41b52ede769d93f928f"
+    },
+    {
+      "path": "runtime/ui/icon_bet_plus.png",
+      "role": "ui_icon",
+      "source": "vector/icon_bet_plus.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 38813,
+      "sha256": "927b4f2f21427e1db554d5cae3e1298e2b486dd0e4dabcdd911a8afac7215c58"
+    },
+    {
+      "path": "runtime/ui/icon_bet_minus.png",
+      "role": "ui_icon",
+      "source": "vector/icon_bet_minus.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 38242,
+      "sha256": "769e3d1f7ed807d613222b79ccb7f38b1489cfbae94e2d413197dae2a0320b72"
+    },
+    {
+      "path": "runtime/ui/icon_menu.png",
+      "role": "ui_icon",
+      "source": "vector/icon_menu.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 39278,
+      "sha256": "b20bf83ba5d1246c889731ede0498ee390f1a049381b3d7559a47d875badb1df"
+    },
+    {
+      "path": "runtime/ui/icon_sound_on.png",
+      "role": "ui_icon",
+      "source": "vector/icon_sound_on.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 47106,
+      "sha256": "d54b4da212588e7fb93609bcb15d75211e156ff44f184b7488022124e0841fde"
+    },
+    {
+      "path": "runtime/ui/icon_sound_off.png",
+      "role": "ui_icon",
+      "source": "vector/icon_sound_off.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 44842,
+      "sha256": "33af23d4c9934595783a4f4c8a8af9a1fdbc01437eb15105167890c6fdc1c3ed"
+    },
+    {
+      "path": "runtime/ui/icon_info.png",
+      "role": "ui_icon",
+      "source": "vector/icon_info.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 39257,
+      "sha256": "4430f1875d5d24d4291cf45f07aa9afe21b7a88dc67bc0e9a98e7b4d3d41e0bd"
+    },
+    {
+      "path": "runtime/ui/icon_close.png",
+      "role": "ui_icon",
+      "source": "vector/icon_close.svg",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "bytes": 40746,
+      "sha256": "de0d8e363fc1fa6e886715df8d70d43889da648e4c3eb8a16c3c15f779727936"
+    },
+    {
+      "path": "runtime/covers/cover_v1.jpg",
+      "role": "cover_draft",
+      "source": "Native composition: mortimer_idle, bg_base, logo",
+      "width": 1200,
+      "height": 800,
+      "mode": "RGB",
+      "bytes": 362930,
+      "sha256": "5dbdcc478745d785e75bbacf1470948401ad713bc2d95678dc8011e00ed80150",
+      "dashboardSizeConfirmed": false
+    },
+    {
+      "path": "runtime/covers/cover_v2.jpg",
+      "role": "cover_draft",
+      "source": "Native composition: mortimer_win, bg_bonus, logo",
+      "width": 1200,
+      "height": 800,
+      "mode": "RGB",
+      "bytes": 400875,
+      "sha256": "26f4bc69de4f9ea0623980845f0f037c7fff0bcc8f23289f266e786ccdec7a87",
+      "dashboardSizeConfirmed": false
+    },
+    {
+      "path": "runtime/covers/cover_v3.jpg",
+      "role": "cover_draft",
+      "source": "Native composition: mortimer_bonus, bg_base, logo",
+      "width": 1200,
+      "height": 800,
+      "mode": "RGB",
+      "bytes": 389866,
+      "sha256": "42187977869d455fb71c165cfc262537a788e974cbf81a7ae9987c3c040f7516",
+      "dashboardSizeConfirmed": false
+    },
+    {
+      "path": "runtime/screens/bonus_entry.png",
+      "role": "bonus_screen",
+      "source": "bg_bonus_landscape + vector/bonus_entry.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 1374258,
+      "sha256": "4d420744a4d314cf718f6310b49e694f09de5b55a708e7fca84ce9dcb5c6bb7e"
+    },
+    {
+      "path": "runtime/screens/bonus_result.png",
+      "role": "bonus_screen",
+      "source": "bg_bonus_landscape + vector/bonus_result.svg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 1376874,
+      "sha256": "6df4f91298a78e54c90f2b68aa4dc688ebfcda266ec898a032353cab32022080"
+    }
+  ]
+}
