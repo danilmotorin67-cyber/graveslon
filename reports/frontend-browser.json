@@ -158,6 +158,94 @@
     ],
     "consoleErrors": []
   },
+  "bonus": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "all 10 books: grave maps, non-wild replacements, retriggers, all levels and base-scene restoration",
+        "status": "PASS",
+        "coverage": {
+          "reveals": 96,
+          "updates": 60,
+          "retriggers": 2,
+          "persistentNonWild": 312,
+          "levels": [
+            2,
+            3,
+            5,
+            10
+          ],
+          "poses": [
+            "bonus",
+            "idle",
+            "win"
+          ],
+          "results": 10
+        }
+      },
+      {
+        "name": "visible grave upgrade to ×3 and grounded Mortimer",
+        "status": "PASS"
+      },
+      {
+        "name": "visible grave upgrade to ×10 and grounded Mortimer",
+        "status": "PASS"
+      },
+      {
+        "name": "stop during grave upgrade and restore the same ×10 map",
+        "status": "PASS"
+      },
+      {
+        "name": "grave formula explains raw award and capped credited amount separately",
+        "status": "PASS"
+      },
+      {
+        "name": "retrigger +5, updated total and character reaction",
+        "status": "PASS"
+      },
+      {
+        "name": "single bonus result, clean exit and neutral return: base/max_win",
+        "status": "PASS"
+      },
+      {
+        "name": "single bonus result, clean exit and neutral return: bonus/loss",
+        "status": "PASS"
+      },
+      {
+        "name": "real bonus intro, graves, formula layout and clean finish: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "real bonus intro, graves, formula layout and clean finish: desktop-compact",
+        "status": "PASS"
+      },
+      {
+        "name": "real bonus intro, graves, formula layout and clean finish: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "real bonus intro, graves, formula layout and clean finish: small-phone",
+        "status": "PASS"
+      },
+      {
+        "name": "real bonus intro, graves, formula layout and clean finish: tablet",
+        "status": "PASS"
+      },
+      {
+        "name": "real bonus intro, graves, formula layout and clean finish: landscape",
+        "status": "PASS"
+      },
+      {
+        "name": "English bonus entry, HUD and result caption",
+        "status": "PASS"
+      },
+      {
+        "name": "early RAF timestamp never creates a negative amount or stalls the real credit counter",
+        "status": "PASS"
+      }
+    ],
+    "consoleErrors": []
+  },
   "consoleErrors": [],
   "httpErrors": [],
   "limitations": [

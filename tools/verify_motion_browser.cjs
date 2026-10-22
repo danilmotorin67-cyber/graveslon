@@ -79,7 +79,7 @@ async function audit(browser,{baseURL,outputDir}){
  checks.push({name:'skip a line cycle without dropping any credited events',status:'PASS'});await skip.close();
  const counter=await lab();
  const cap=fixtures.find(s=>s.key==='base/max_win');
- await counter.selectOption('#scenario',cap.key);await counter.fill('#resume-at',String(cap.book.events.at(-1).index));
+ await counter.selectOption('#scenario',cap.key);await counter.fill('#resume-at',String(cap.book.events.find(e=>e.type==='freeSpinEnd').index));
  await counter.evaluate(()=>{window.__playing=window.animationLab.play();});
  await counter.waitForSelector('#overlay:not([hidden])');
  assert.equal(await counter.locator('#overlay-value').textContent(),'0.00×','counter must not flash the final amount before counting');

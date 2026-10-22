@@ -89,13 +89,12 @@ function render(){
  $('#settings-button').disabled=ready&&(s.locked||autoRunning);
  $('#language-button').disabled=ready&&(s.locked||autoRunning);
  const feature=s?.displayState;
- $('#feature-counter').hidden=!(playing&&feature?.totalFs);
- if(feature?.totalFs)$('#feature-count').textContent=`${feature.fs} / ${feature.totalFs}`;
  let message=t('ready');
  if(!ready)message=t('loading');
  else if(status==='requesting'||status==='settling')message=t(status);
  else if(playing){
-  const phase=['winInfo','setWin'].includes(presentationPhase)?t('showingWin'):presentationPhase==='finalWin'?t('showingResult'):t('playing');
+  const phase=['winInfo','setWin'].includes(presentationPhase)?t('showingWin'):
+   ({graveMultiplierUpdate:t('graveUpdateStatus'),freeSpinTrigger:t('bonusEntryStatus'),freeSpinRetrigger:t('bonusRetriggerTitle'),freeSpinEnd:t('bonus_result'),finalWin:t('showingResult')})[presentationPhase]||t('playing');
   message=feature?.totalFs?t('freeStatus',{current:feature.fs,total:feature.totalFs})+' · '+phase:phase;
  }
  else if(autoRunning)message=t('autoRemaining',{count:autoRemaining});

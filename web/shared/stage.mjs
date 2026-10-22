@@ -1,4 +1,5 @@
 import {BookPlayer,TIMINGS} from '../animation-lab/book-player.mjs';
+import {createBonusPresentation} from './bonus-presentation.mjs';
 export const ASSET_ROOT=new URL('../../assets/runtime/',import.meta.url).href;
 const FILES={L1:'candle',L2:'key',L3:'raven',L4:'poison',H1:'lantern',H2:'bat',H3:'cat',H4:'widow',M:'mortimer',W:'hand',S:'coffin'};
 export const symbolPath=(id,blur=false)=>`${ASSET_ROOT}${blur?'symbols_blur':'symbols'}/sym_${id}_${FILES[id]}.png`;
@@ -12,6 +13,13 @@ function write(selector,value){const el=$(selector);if(el)el.textContent=value;}
 const text=(key,values={})=>options.translate?.(key,values) ?? ({
   line:`Линия ${values.number}`,lineProgress:`${values.current} / ${values.total}`,
   linesPaid:`Оплачено линий: ${values.count}`,spinAward:'Выигрыш за вращение',roundAward:'Общий выигрыш',winningLine:'Выигрышная линия',
+  bonusName:'Разрытые могилы',freeSpins:'Бесплатные вращения',graveLadder:'Множители могил: ×2 → ×3 → ×5 → ×10',
+  graveContribution:'Могилы',graveSumExplanation:'Множители участвующих могил складываются',cappedAward:`Начислено ${values.amount} · лимит 5000×`,
+  gravesStrengthen:'Могилы усиливаются',gravesOpen:'Открываются могилы',graveAtMax:'×10 МАКС',
+  bonusKicker:'Бонус',bonusIntroHelp:'Бесплатных вращений\nМогилы сохраняются: ×2 → ×3 → ×5 → ×10.',
+  bonusRetriggerTitle:'Бонус продолжается',bonusRetriggerKicker:'Дополнительные вращения',bonusRetriggerHelp:`Всего ${values.total} бесплатных вращений.\nОткрытые могилы сохраняются.`,
+  bonusFinished:'Бонус завершён',bonus_result:'Итог бонуса',bonusResultHelp:`Сыграно вращений: ${values.played} / ${values.total}`,
+  bonusRoundTotal:`Общий выигрыш раунда: ${values.amount}`,bonusCapHelp:'Достигнут лимит 5000×. Оставшиеся вращения завершены.',
 }[key]||key);
 class MotionClock {
   active=new Set(); skipped=false;
@@ -44,7 +52,7 @@ class MotionClock {
     return new Promise(resolve=>{
       const start=performance.now(),duration=ms*this.factor();let frame;
       const finish=()=>{cancelAnimationFrame(frame);el.textContent=format(total);this.active.delete(finish);resolve();};
-      const tick=now=>{const t=Math.min(1,(now-start)/duration);el.textContent=format(Math.round(total*(1-(1-t)**3)));if(t===1)finish();else frame=requestAnimationFrame(tick);};
+      const tick=now=>{const t=Math.max(0,Math.min(1,(now-start)/duration));el.textContent=format(Math.round(total*(1-(1-t)**3)));if(t===1)finish();else frame=requestAnimationFrame(tick);};
       this.active.add(finish);frame=requestAnimationFrame(tick);
     });
   }
@@ -57,9 +65,10 @@ for(let r=0;r<5;r++){
   for(let y=0;y<3;y++){
     const cell=document.createElement('div');cell.className='cell';cell.dataset.reel=r;cell.dataset.row=y+1;
     const glow=document.createElement('div');glow.className='grave-glow';
+    const bed=document.createElement('div');bed.className='grave-bed';bed.setAttribute('aria-hidden','true');
     const im=document.createElement('img');im.className='symbol';im.alt='';
     const mult=document.createElement('span');mult.className='multiplier';mult.hidden=true;
-    cell.append(glow,im,mult);reel.append(cell);cells[r][y]=cell;
+    cell.append(glow,bed,im,mult);reel.append(cell);cells[r][y]=cell;
   }
   $('#reels').append(reel);
 }
@@ -69,8 +78,9 @@ readout.setAttribute('role','status');readout.setAttribute('aria-live','polite')
 const readoutLabel=document.createElement('span'),readoutValue=document.createElement('strong'),readoutDetail=document.createElement('small');
 readoutLabel.className='win-readout-label';readoutValue.className='win-readout-value';readoutDetail.className='win-readout-detail';
 readout.append(readoutLabel,readoutValue,readoutDetail);$('.reels-shell').append(readout);
-let award=null;
+let award=null,bonus;
 function refreshText(){
+  bonus?.refreshText();
   if(!award)return;
   const {key,amount,detail,values,kind}=award;
   readout.hidden=false;readout.dataset.kind=kind;readout.dataset.amount=String(amount);
@@ -85,33 +95,46 @@ function highlight(wins){
   root.classList.toggle('presenting-wins',wins.length>0);
 }
 function clearAwards(){
+  bonus?.clearContributions();
   award=null;readout.hidden=true;delete readout.dataset.line;highlight([]);$('#lines').replaceChildren();
 }
-function character(pose){
-  $('.mortimer-actor').dataset.pose=pose;
-  $('.mortimer').src=`${ROOT}characters/mortimer_${pose}.png`;
+async function character(pose,reaction='calm'){
+  const actor=$('.mortimer-actor'),sprite=$('.mortimer');actor.dataset.reaction=reaction;
+  if(actor.dataset.pose===pose)return;
+  // Only opacity changes: the actor box and the planted soles never translate.
+  for(const animation of sprite.getAnimations())if(!(animation instanceof CSSAnimation)){try{animation.finish();}catch{animation.cancel();}}
+  const previous=actor.dataset.pose;
+  actor.dataset.pose=pose;
+  if(clock.skipped||!clock.factor()||!previous){sprite.src=`${ROOT}characters/mortimer_${pose}.png`;return;}
+  const echo=sprite.cloneNode();echo.className='mortimer-echo';echo.alt='';echo.setAttribute('aria-hidden','true');actor.append(echo);
+  sprite.src=`${ROOT}characters/mortimer_${pose}.png`;
+  try{await Promise.all([
+    clock.animate(echo,[{opacity:1},{opacity:0}],{duration:260,easing:'ease-out'}),
+    clock.animate(sprite,[{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'}),
+  ]);}finally{echo.remove();}
 }
-function drawReel(state,r){
-  state.board[r].forEach((id,y)=>{
-    const cell=cells[r][y],im=cell.querySelector('.symbol');
+function drawCell(state,r,y,{holdBonus=false}={}){
+    const id=state.board[r][y],cell=cells[r][y],im=cell.querySelector('.symbol');
     if(im.dataset.symbol!==id){im.src=path(id);im.dataset.symbol=id;im.alt=options.symbolLabel?.(id)??id;}
-    cell.classList.toggle('dug',state.graves[r][y]>0);
-    const mult=cell.querySelector('.multiplier');mult.hidden=!state.graves[r][y];mult.textContent='×'+state.graves[r][y];
-  });
+    const value=state.bonusEnded&&!holdBonus?0:state.graves[r][y];
+    cell.classList.toggle('dug',value>0);cell.dataset.multiplier=String(value);
+    const mult=cell.querySelector('.multiplier');mult.hidden=!value;mult.textContent='×'+value;
 }
-function draw(state,{deferReels=false}={}){
-  const mode=state.gameType==='freegame'||state.phase==='bonus'?'bonus':'base';
+function drawReel(state,r,settings){state.board[r].forEach((_,y)=>drawCell(state,r,y,settings));}
+function draw(state,{deferReels=false,holdBonus=false}={}){
+  const mode=state.totalFs&&(!state.bonusEnded||holdBonus)?'bonus':'base';
   const bg=`${ROOT}backgrounds/bg_${mode}_landscape.jpg`;
   if(!$('#background').src.endsWith(bg.replace('../../','')))$('#background').src=bg;
   $('.background source').srcset=`${ROOT}backgrounds/bg_${mode}_portrait.jpg`;
-  if(!deferReels)reels.forEach((_,r)=>drawReel(state,r));
+  if(!deferReels)reels.forEach((_,r)=>drawReel(state,r,{holdBonus}));
   write('#fs',state.totalFs?`${state.fs} / ${state.totalFs}`:'—');
   write('#spin-win',format(state.spinWin));write('#total',format(state.total));
   options.onState?.(state);
+  bonus?.render(state,{holdBonus});
 }
 function cleanup(){
-  clock.skip();clearAwards();$('#overlay').hidden=true;
-  root.querySelectorAll('.particle,.blur-strip,.landing-strip').forEach(e=>e.remove());
+  clock.skip();clearAwards();bonus?.cleanup();$('#overlay').hidden=true;
+  root.querySelectorAll('.particle,.blur-strip,.landing-strip,.scene-transition,.mortimer-echo').forEach(e=>e.remove());
   reels.forEach(r=>r.classList.remove('anticipating','spinning','stopping'));
 }
 async function particles(el,count=8){
@@ -121,25 +144,46 @@ async function particles(el,count=8){
     try{await clock.animate(dot,[{transform:'translate(0,0)',opacity:1},{transform:`translate(${x}px,${y}px)`,opacity:0}],{duration:TIMINGS.particle});}finally{dot.remove();}
   }));
 }
-async function overlay(asset,value,label='',counter=false){
-  $('#overlay-art').hidden=!!options.translate;
-  if(!options.translate)$('#overlay-art').src=`${ROOT}ui/${asset}.png`;
+const overlayKicker=document.createElement('div');overlayKicker.className='bonus-overlay-kicker';overlayKicker.hidden=true;
+const overlayEmblem=document.createElement('img');overlayEmblem.className='bonus-overlay-emblem';overlayEmblem.src=path('S');overlayEmblem.alt='';overlayEmblem.hidden=true;
+const overlayDetail=document.createElement('div');overlayDetail.className='bonus-overlay-detail';overlayDetail.hidden=true;
+$('.overlay-inner').prepend(overlayKicker);$('#overlay-label').after(overlayEmblem);$('#overlay-value').after(overlayDetail);
+function captureScene(){
+  if(clock.skipped||!clock.factor())return null;
+  const previous=$('.background').cloneNode(true);previous.classList.add('scene-transition');previous.querySelector('img').removeAttribute('id');previous.setAttribute('aria-hidden','true');root.append(previous);return previous;
+}
+async function fadeScene(previous){
+  if(!previous)return;
+  try{await clock.animate(previous,[{opacity:1},{opacity:0}],{duration:600,easing:'ease-in-out'});}finally{previous.remove();}
+}
+async function overlay(asset,value,label='',counter=false,settings={}){
+  $('#overlay').dataset.kind=settings.kind||asset;
+  $('#overlay-art').hidden=!!options.translate||!!settings.kind;
+  if(!options.translate&&!settings.kind)$('#overlay-art').src=`${ROOT}ui/${asset}.png`;
+  overlayKicker.hidden=!settings.kind;overlayEmblem.hidden=!settings.kind;overlayDetail.hidden=!settings.kind;
+  overlayKicker.textContent=settings.kicker||'';overlayDetail.textContent=settings.detail||'';
   $('#overlay-label').textContent=label || options.translate?.(asset) || '';$('#overlay-value').textContent=typeof value==='number'?format(counter?0:value):value;
   $('#overlay').hidden=false;
   try{
     await clock.animate($('.overlay-inner'),[{transform:'scale(.6)',opacity:0},{transform:'scale(1.03)',opacity:1},{transform:'scale(1)',opacity:1}],{duration:TIMINGS.overlay,easing:'ease-out'});
-    await Promise.all([clock.wait(counter?TIMINGS.bigWin:TIMINGS.feature),counter?clock.counter($('#overlay-value'),value,TIMINGS.bigWin):Promise.resolve(),counter?particles($('.overlay-inner'),24):Promise.resolve()]);
+    const duration=counter?(settings.counterDuration||TIMINGS.bigWin):TIMINGS.feature;
+    await Promise.all([clock.wait(duration),counter?clock.counter($('#overlay-value'),value,duration):Promise.resolve(),counter?particles($('.overlay-inner'),24):Promise.resolve()]);
+    if(settings.hold)await clock.wait(settings.hold);
   }finally{$('#overlay').hidden=true;}
 }
 
+bonus=createBonusPresentation(root,{clock,cells,readout,format,text,renderCell:drawCell,character});
+
 const renderer={
   skip(){clock.skip();},
-  restore(state){cleanup();draw(state);character(state.phase==='bonus'?'bonus':'idle');options.onRestore?.();},
+  restore(state){cleanup();draw(state);character(state.totalFs&&!state.bonusEnded?'bonus':'idle');options.onRestore?.();},
   async event(event,before,after,{instant}){
-    clock.begin(instant);draw(after,{deferReels:event.type==='reveal'});
+    clock.begin(instant);
+    const previousScene=event.type==='freeSpinTrigger'?captureScene():null;
+    draw(after,{deferReels:['reveal','graveMultiplierUpdate'].includes(event.type),holdBonus:event.type==='freeSpinEnd'});
     options.onEvent?.(event,before,after);
     if(event.type==='reveal'){
-      clearAwards();character(after.gameType==='freegame'?'bonus':'idle');
+      clearAwards();const pose=character(after.gameType==='freegame'?'bonus':'idle');
       await Promise.all(reels.map(async(reel,r)=>{
         if(clock.skipped||!clock.factor()){drawReel(after,r);return;}
         reel.classList.add('spinning');
@@ -170,14 +214,13 @@ const renderer={
           if(id==='S')await clock.animate(im,[{transform:'rotate(-5deg)',filter:'drop-shadow(0 0 12px #b779ff)'},{transform:'rotate(5deg)',filter:'drop-shadow(0 0 18px #b779ff)'},{transform:'rotate(0)',filter:'drop-shadow(0 0 0 transparent)'}],{duration:TIMINGS.scatter});
         }));
       }));
+      await pose;
     }else if(event.type==='graveMultiplierUpdate'){
-      await Promise.all(event.positions.map(async p=>{
-        const cell=cellAt(p);
-        await Promise.all([clock.animate(cell.querySelector('.multiplier'),[{transform:'scale(.3)'},{transform:'scale(1.35)'},{transform:'scale(1)'}],{duration:TIMINGS.grave}),clock.animate(cell.querySelector('.grave-glow'),[{opacity:0},{opacity:1}],{duration:TIMINGS.grave}),particles(cell)]);
-      }));
+      await bonus.updateGraves(event,before,after);
     }else if(event.type==='winInfo'){
       const paid=event.wins.filter(w=>w.win>0);
       clearAwards();
+      const pose=paid.length?character('win','win'):Promise.resolve();
       const duration=Math.max(360,Math.min(TIMINGS.line,3200/Math.max(1,paid.length)));
       for(const [index,win] of paid.entries()){
         if(clock.skipped||!clock.factor())break;
@@ -185,34 +228,49 @@ const renderer={
         const number=win.meta?.lineIndex;
         readout.dataset.line=Number.isInteger(number)?String(number):'';
         showAward(Number.isInteger(number)?'line':'winningLine',win.win,paid.length>1?'lineProgress':'',{number,current:index+1,total:paid.length},'line');
+        bonus.showContribution(win,after.graves);
         const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');
         line.setAttribute('points',win.positions.map(p=>`${p.reel*100+50},${(p.row-1)*100+50}`).join(' '));$('#lines').append(line);
         const length=line.getTotalLength();line.style.strokeDasharray=String(length);
         await Promise.all([
           clock.wait(duration),
+          bonus.animateContribution(duration),
           clock.animate(line,[{strokeDashoffset:length},{strokeDashoffset:0}],{duration:Math.min(300,duration),easing:'ease-out'}),
           ...win.positions.map(p=>clock.animate(cellAt(p).querySelector('.symbol'),[{transform:'scale(1)'},{transform:'scale(1.09)',offset:.45},{transform:'scale(1)'}],{duration:Math.min(TIMINGS.symbol,duration),easing:'ease-in-out'})),
         ]);
       }
-      $('#lines').replaceChildren();delete readout.dataset.line;highlight(paid);
+      bonus.clearContributions();$('#lines').replaceChildren();delete readout.dataset.line;highlight(paid);
       if(paid.length)showAward('spinAward',event.totalWin,paid.length>1?'linesPaid':'',{count:paid.length});
+      await pose;
     }else if(event.type==='setWin'){
       if(event.amount>0)showAward('spinAward',event.amount);
     }else if(event.type==='freeSpinTrigger'){
-      character('bonus');await overlay('bonus_entry',options.translate?.('freeCount',{count:event.totalFs}) ?? `${event.totalFs} FS`);
+      await Promise.all([character('bonus','entry'),fadeScene(previousScene),overlay('bonus_entry',String(event.totalFs),text('bonusName'),false,{
+        kind:'bonus-entry',kicker:text('bonusKicker'),detail:text('bonusIntroHelp'),
+      })]);
+    }else if(event.type==='updateFreeSpin'){
+      await bonus.pulseCounter();
     }else if(event.type==='freeSpinRetrigger'){
-      await overlay('bonus_entry',options.translate?.('retriggerCount',{total:event.totalFs}) ?? `+5 FS · ${event.totalFs} ВСЕГО`);
+      await Promise.all([character('bonus','retrigger'),bonus.pulseCounter(),overlay('bonus_entry','+'+(event.totalFs-before.totalFs),text('bonusRetriggerTitle'),false,{
+        kind:'bonus-retrigger',kicker:text('bonusRetriggerKicker'),detail:text('bonusRetriggerHelp',{total:event.totalFs}),
+      })]);
     }else if(event.type==='freeSpinEnd'){
-      await overlay('bonus_result',event.amount);
+      const detail=after.capped?text('bonusCapHelp'):text('bonusResultHelp',{played:after.fs,total:after.totalFs});
+      await Promise.all([character(event.amount>0?'win':'idle',event.amount>0?'result':'calm'),overlay('bonus_result',event.amount,text('bonus_result'),true,{
+        kind:'bonus-result',kicker:text('bonusFinished'),detail:detail+(after.total!==event.amount?'\n'+text('bonusRoundTotal',{amount:format(after.total)}):''),counterDuration:2400,hold:850,
+      })]);
+      const scene=captureScene();clearAwards();draw(after);
+      await Promise.all([fadeScene(scene),character('idle')]);
     }else if(event.type==='finalWin'){
       if(event.amount>0)showAward(after.totalFs?'roundAward':'spinAward',event.amount);
       else clearAwards();
       // Celebration policy uses the already credited total, never computes an award.
       const cost=options.mode?.()==='bonus'?10000:100;
-      if(event.amount>cost && event.amount>=2000){
-        character('win');
+      if(!after.totalFs&&event.amount>cost && event.amount>=2000){
+        await character('win','result');
         await overlay(event.amount>=10000?'epic_win':event.amount>=5000?'mega_win':'big_win',event.amount,'',true);
       }
+      await character('idle');
     }
   }
 };

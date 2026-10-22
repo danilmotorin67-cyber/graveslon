@@ -17,7 +17,7 @@ function position(p) {
 export function initialState() {
   return { board: Array.from({length:5},()=>Array(3).fill('L1')),
     graves: Array.from({length:5},()=>Array(3).fill(0)), index:-1, total:0, spinWin:0,
-    fs:0, totalFs:0, freeWin:0, phase:'base', gameType:'basegame', capped:false, wins:[] };
+    fs:0, totalFs:0, freeWin:0, bonusEnded:false, phase:'base', gameType:'basegame', capped:false, wins:[] };
 }
 
 export function applyEvent(previous, event) {
@@ -60,6 +60,7 @@ export function applyEvent(previous, event) {
     case 'freeSpinTrigger':
       event.positions.forEach(position);
       state.phase = 'bonus'; state.totalFs = count(event.totalFs);
+      state.bonusEnded = false;
       state.graves = Array.from({length:5},()=>Array(3).fill(0));
       break;
     case 'updateFreeSpin':
@@ -70,7 +71,7 @@ export function applyEvent(previous, event) {
       event.positions.forEach(position);
       state.totalFs = count(event.totalFs);
       break;
-    case 'freeSpinEnd': state.freeWin = units(event.amount); break;
+    case 'freeSpinEnd': state.freeWin = units(event.amount); state.bonusEnded = true; break;
     case 'wincap':
       check(event.amount === 500000, 'Invalid cap event');
       state.total = event.amount; state.capped = true;

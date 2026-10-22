@@ -26,7 +26,7 @@ async function audit(browser,{baseURL='http://127.0.0.1:8765',outputDir}={}){
       return {results,overflow:document.documentElement.scrollWidth>innerWidth,
         panelOverlap:document.querySelector('.reels-shell').getBoundingClientRect().bottom>document.querySelector('.hud').getBoundingClientRect().top,
         badImages:[...document.images].filter(im=>im.src&&!im.complete||im.src&&im.naturalWidth===0).map(im=>im.src),
-        leftovers:document.querySelectorAll('.blur-strip,.landing-strip,.particle').length,
+        leftovers:document.querySelectorAll('.blur-strip,.landing-strip,.particle,.grave-change,.mortimer-echo,.scene-transition').length,
         stage:{width:document.querySelector('.stage').clientWidth,height:document.querySelector('.stage').clientHeight}};
     });
     result.results.forEach(r=>{assert.equal(r.actual,r.expected,r.key);assert.equal(r.phase,'complete');});
@@ -56,7 +56,7 @@ async function audit(browser,{baseURL='http://127.0.0.1:8765',outputDir}={}){
     lab.player.finish();await playing;
     deltas.sort((a,b)=>a-b);
     return {cpuThrottle:4,sampleFrames:deltas.length,medianFrameMs:deltas[Math.floor(deltas.length/2)],p95FrameMs:deltas[Math.floor(deltas.length*.95)],
-      finalTotal:lab.player.state.total,expected:lab.scenarios[0].book.payoutMultiplier,leftovers:document.querySelectorAll('.blur-strip,.landing-strip,.particle').length};
+      finalTotal:lab.player.state.total,expected:lab.scenarios[0].book.payoutMultiplier,leftovers:document.querySelectorAll('.blur-strip,.landing-strip,.particle,.grave-change,.mortimer-echo,.scene-transition').length};
   });
   assert.equal(timing.finalTotal,timing.expected);assert.equal(timing.leftovers,0);
   await page.close();assert.deepEqual(errors,[]);assert.deepEqual(responses,[]);
