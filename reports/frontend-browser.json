@@ -109,6 +109,55 @@
       "status": "PASS"
     }
   ],
+  "motion": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "progressive stops, hidden unrevealed board, anticipation and finish: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "progressive stops, hidden unrevealed board, anticipation and finish: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "all 20 lines",
+        "status": "PASS",
+        "paidLines": 20
+      },
+      {
+        "name": "capped credited amounts",
+        "status": "PASS",
+        "paidLines": 7
+      },
+      {
+        "name": "turbo line order",
+        "status": "PASS",
+        "paidLines": 20
+      },
+      {
+        "name": "skip a line cycle without dropping any credited events",
+        "status": "PASS"
+      },
+      {
+        "name": "big-win counter starts at zero and finishes at the authoritative award",
+        "status": "PASS"
+      },
+      {
+        "name": "stop during spin, cleanup and reduced-motion restart",
+        "status": "PASS"
+      },
+      {
+        "name": "game line caption, exact amount, language and zero-win reset: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "game line caption, exact amount, language and zero-win reset: phone",
+        "status": "PASS"
+      }
+    ],
+    "consoleErrors": []
+  },
   "consoleErrors": [],
   "httpErrors": [],
   "limitations": [

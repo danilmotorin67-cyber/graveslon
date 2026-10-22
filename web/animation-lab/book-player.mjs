@@ -2,8 +2,8 @@
 const SYMBOLS = new Set(['L1','L2','L3','L4','H1','H2','H3','H4','M','W','S']);
 export const EVENT_TYPES = new Set(['reveal','graveMultiplierUpdate','winInfo','setWin','setTotalWin',
   'freeSpinTrigger','updateFreeSpin','freeSpinRetrigger','freeSpinEnd','wincap','finalWin']);
-export const TIMINGS = Object.freeze({ spin: 1350, stagger: 140, anticipation: 220,
-  land: 260, symbol: 1200, grave: 650, feature: 2200, bigWin: 3600, line: 1000,
+export const TIMINGS = Object.freeze({ spin: 900, stagger: 150, anticipation: 500, cycle:380,
+  land: 240, symbol: 720, grave: 650, feature: 2200, bigWin: 3600, line: 1050,
   particle:650, wild:400, scatter:500, overlay:450, fallback:300,
   fog:18000, idle:5000, bat:20000 });
 

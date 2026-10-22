@@ -1,20 +1,20 @@
-✔ every real QA book replays to its authoritative total, including zero and cap (52.063039ms)
-✔ resume at every event boundary restores the same final state and grave map (1718.015773ms)
-✔ graves persist beneath replacement symbols and round totals replace, not accumulate (0.660735ms)
-✔ new rounds reset grave state and free-spin counters (13.328656ms)
-✔ finish skips effects while processing every remaining event exactly once (3.093569ms)
-✔ stop interrupts cleanly and a subsequent play starts from a clean state (3.150265ms)
-✔ invalid books fail before displaying a frame; unsupported events are never silently ignored (2.232863ms)
-✔ credit formatting and payouts preserve fractional credits and large integers (17.339387ms)
-✔ demo base examples are real non-feature books; bonus examples always trigger (0.254112ms)
-✔ debit, immutable book, idempotent completion and a single pending round (1.251996ms)
-✔ bonus costs exactly 100 bets and insufficient funds never change the wallet (1.768504ms)
-✔ invalid books fail before any debit or sequence advance (2.378422ms)
-✔ bet changes and overlapping spins are locked throughout an accepted round (1.813191ms)
-✔ a rendering failure resumes the same round without a second debit (5.208505ms)
-✔ an ambiguous completion is retried without replaying or crediting twice (1.525307ms)
-✔ idle insufficient-funds errors remain recoverable by choosing a lower bet (0.955028ms)
-✔ both languages cover the same UI and display rules retain the canonical contract (1.220348ms)
+✔ every real QA book replays to its authoritative total, including zero and cap (60.126474ms)
+✔ resume at every event boundary restores the same final state and grave map (1481.755385ms)
+✔ graves persist beneath replacement symbols and round totals replace, not accumulate (0.902619ms)
+✔ new rounds reset grave state and free-spin counters (11.735886ms)
+✔ finish skips effects while processing every remaining event exactly once (2.897824ms)
+✔ stop interrupts cleanly and a subsequent play starts from a clean state (3.8645ms)
+✔ invalid books fail before displaying a frame; unsupported events are never silently ignored (2.626295ms)
+✔ credit formatting and payouts preserve fractional credits and large integers (21.513905ms)
+✔ demo base examples are real non-feature books; bonus examples always trigger (0.346192ms)
+✔ debit, immutable book, idempotent completion and a single pending round (1.716085ms)
+✔ bonus costs exactly 100 bets and insufficient funds never change the wallet (2.185311ms)
+✔ invalid books fail before any debit or sequence advance (4.039145ms)
+✔ bet changes and overlapping spins are locked throughout an accepted round (1.918199ms)
+✔ a rendering failure resumes the same round without a second debit (2.357711ms)
+✔ an ambiguous completion is retried without replaying or crediting twice (1.1157ms)
+✔ idle insufficient-funds errors remain recoverable by choosing a lower bet (1.046456ms)
+✔ both languages cover the same UI and display rules retain the canonical contract (1.513249ms)
 ℹ tests 17
 ℹ suites 0
 ℹ pass 17
@@ -22,4 +22,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1879.079683
+ℹ duration_ms 1650.944332

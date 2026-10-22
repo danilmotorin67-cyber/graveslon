@@ -122,7 +122,8 @@ async function audit(browser,{baseURL='http://127.0.0.1:8767',outputDir=path.joi
  assert.equal(await amount(fault,'#balance-output'),initial);
  results.push({name:'content failure and retry',status:'PASS'});await fault.close();
  assert.deepEqual(errors,[]);assert.deepEqual(httpErrors,[]);
- return {status:'PASS',results,consoleErrors:errors,httpErrors,limitations:['Demo credits and fixed illustrative books only','RGS, audio and physical-device testing deferred']};
+ const motion=await require('./verify_motion_browser.cjs').audit(browser,{baseURL,outputDir});
+ return {status:'PASS',results,motion,consoleErrors:errors,httpErrors,limitations:['Demo credits and fixed illustrative books only','RGS, audio and physical-device testing deferred']};
 }
 module.exports={audit};
 if(require.main===module){

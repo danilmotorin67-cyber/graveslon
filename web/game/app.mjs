@@ -17,7 +17,7 @@ const requestedLanguage=new URLSearchParams(location.search).get('lang');
 if(requestedLanguage==='ru'||requestedLanguage==='en')prefs.language=requestedLanguage;
 const t=(key,values)=>translate(prefs.language,key,values);
 const money=amount=>formatCredits(amount,prefs.language);
-let session,stage,rules,scenarios,bootError=false,booting=true;
+let session,stage,rules,scenarios,bootError=false,booting=true,presentationBet=1_000_000n,presentationPhase='reveal';
 let autoRunning=false,autoRemaining=0,autoSerial=0,buyQuote=null,selectedLine=0;
 
 function savePreferences(){
@@ -52,7 +52,7 @@ function applyLanguage(){
   $('.mortimer').alt=rules.symbols.M[prefs.language==='ru'?0:1];
   all('.stage .symbol').forEach(im=>{im.alt=rules.symbols[im.dataset.symbol]?.[prefs.language==='ru'?0:1]||im.dataset.symbol;});
  }
- render();fullscreenLabel();
+ stage?.refreshText();render();fullscreenLabel();
 }
 function render(){
  const s=session,ready=!!s?.betLevels.length&&!booting&&!bootError;
@@ -94,7 +94,10 @@ function render(){
  let message=t('ready');
  if(!ready)message=t('loading');
  else if(status==='requesting'||status==='settling')message=t(status);
- else if(playing)message=feature?.totalFs?t('freeStatus',{current:feature.fs,total:feature.totalFs}):t('playing');
+ else if(playing){
+  const phase=['winInfo','setWin'].includes(presentationPhase)?t('showingWin'):presentationPhase==='finalWin'?t('showingResult'):t('playing');
+  message=feature?.totalFs?t('freeStatus',{current:feature.fs,total:feature.totalFs})+' · '+phase:phase;
+ }
  else if(autoRunning)message=t('autoRemaining',{count:autoRemaining});
  else if(!enough)message=t('insufficientBalance');
  else if(s.lastWin>0n)message=t('roundComplete');
@@ -247,8 +250,9 @@ async function boot(){
   stage??=createStage($('.stage'),{
    motionFactor,mode:()=>session?.active?.mode||'base',translate:t,
    symbolLabel:id=>rules?.symbols[id]?.[prefs.language==='ru'?0:1]||id,
-   format:value=>money(payoutFor(session?.active?.bet||session?.bet||1_000_000n,value)),
-   onState:state=>session?.display(state),
+   format:value=>money(payoutFor(presentationBet,value)),
+   onState:state=>{if(session?.active)presentationBet=session.active.bet;session?.display(state);},
+   onEvent:event=>{presentationPhase=event.type;render();},
   });
   const data=await Promise.all([readJson('./rules.json'),readJson('./demo-rounds.json'),stage.preload()]);
   rules=data[0];scenarios=data[1].scenarios;
