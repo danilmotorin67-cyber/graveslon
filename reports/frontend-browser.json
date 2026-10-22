@@ -1,0 +1,118 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "status": "PASS",
+      "checks": [
+        "initial balance",
+        "bet selection",
+        "credited win",
+        "zero win",
+        "cancel purchase",
+        "focus return",
+        "layout"
+      ]
+    },
+    {
+      "name": "phone",
+      "width": 390,
+      "height": 844,
+      "status": "PASS",
+      "checks": [
+        "initial balance",
+        "bet selection",
+        "credited win",
+        "zero win",
+        "cancel purchase",
+        "focus return",
+        "layout"
+      ]
+    },
+    {
+      "name": "small-phone",
+      "width": 320,
+      "height": 568,
+      "status": "PASS",
+      "checks": [
+        "initial balance",
+        "bet selection",
+        "credited win",
+        "zero win",
+        "cancel purchase",
+        "focus return",
+        "layout"
+      ]
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "status": "PASS",
+      "checks": [
+        "initial balance",
+        "bet selection",
+        "credited win",
+        "zero win",
+        "cancel purchase",
+        "focus return",
+        "layout"
+      ]
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "status": "PASS",
+      "checks": [
+        "initial balance",
+        "bet selection",
+        "credited win",
+        "zero win",
+        "cancel purchase",
+        "focus return",
+        "layout"
+      ]
+    },
+    {
+      "name": "in-flight locking and finish",
+      "status": "PASS"
+    },
+    {
+      "name": "bonus confirmation, 100x debit and localized overlay",
+      "status": "PASS"
+    },
+    {
+      "name": "English rules, all symbols, 20 paylines and keyboard tabs",
+      "status": "PASS"
+    },
+    {
+      "name": "settings persist, wallet does not persist",
+      "status": "PASS"
+    },
+    {
+      "name": "autoplay stop completes one accepted round",
+      "status": "PASS"
+    },
+    {
+      "name": "autoplay restart cancels the previous timer and stops on bonus",
+      "status": "PASS"
+    },
+    {
+      "name": "insufficient bonus balance disables purchase",
+      "status": "PASS"
+    },
+    {
+      "name": "content failure and retry",
+      "status": "PASS"
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": [],
+  "limitations": [
+    "Demo credits and fixed illustrative books only",
+    "RGS, audio and physical-device testing deferred"
+  ]
+}

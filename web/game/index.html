@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#0c1216"><title>Midnight Plots — Полуночные могилы</title>
+ <link rel="icon" href="../../assets/runtime/symbols/sym_W_hand.png"><link rel="stylesheet" href="./style.css">
+</head>
+<body class="game-page" data-state="loading">
+<main class="game-shell">
+ <nav class="topbar" aria-label="Midnight Plots">
+  <div class="mode-label"><span class="demo-badge" data-i18n="demo">ДЕМО</span><span class="mode-caption" data-i18n="demoNote">Учебные кредиты · демонстрационные исходы</span></div>
+  <div class="utilities">
+   <button class="language-button" id="language-button" type="button" aria-label="Language">RU <span>⌄</span></button>
+   <button class="utility-button" id="rules-button" type="button" disabled data-label="rules"><img src="../../assets/runtime/ui/icon_info.png" alt=""></button>
+   <button class="utility-button" id="settings-button" type="button" data-label="settings"><img src="../../assets/runtime/ui/icon_menu.png" alt=""></button>
+   <button class="utility-button fullscreen-button" id="fullscreen-button" type="button" data-label="fullscreen"><span aria-hidden="true">⛶</span></button>
+  </div>
+ </nav>
+ <section class="stage game-stage" data-label="scene">
+  <picture class="background"><source media="(orientation:portrait)" srcset="../../assets/runtime/backgrounds/bg_base_portrait.jpg"><img id="background" src="../../assets/runtime/backgrounds/bg_base_landscape.jpg" alt=""></picture>
+  <div class="fog" aria-hidden="true"></div><img class="sky-bat" src="../../assets/runtime/symbols/sym_H2_bat.png" alt="" aria-hidden="true">
+  <img class="logo" src="../../assets/runtime/ui/logo_midnight_plots.png" alt="Midnight Plots">
+  <div class="mortimer-actor" data-pose="idle"><img class="mortimer-ground" src="../../assets/runtime/environment/ground_mortimer.png" alt="" aria-hidden="true"><span class="mortimer-contact" aria-hidden="true"></span><img class="mortimer" src="../../assets/runtime/characters/mortimer_idle.png" alt="Мортимер"></div>
+  <div class="feature-counter" id="feature-counter" hidden><span data-i18n="freeSpins">Бесплатные вращения</span><strong id="feature-count">0 / 10</strong></div>
+  <div class="reels-shell"><div class="reels" id="reels"></div><svg id="lines" viewBox="0 0 500 300" preserveAspectRatio="none" aria-hidden="true"></svg><img class="frame" src="../../assets/runtime/ui/reel_frame.png" alt=""></div>
+  <div class="overlay" id="overlay" hidden><div class="overlay-inner"><img id="overlay-art" alt="" hidden><strong id="overlay-label"></strong><div id="overlay-value"></div><small data-i18n="skipHint">Нажмите, чтобы пропустить эффект</small></div></div>
+ </section>
+ <section class="game-panel" aria-label="Midnight Plots">
+  <button class="bonus-button" id="buy-button" type="button" disabled><img src="../../assets/runtime/symbols/sym_S_coffin.png" alt=""><span><strong data-i18n="buyBonus">Купить бонус</strong><small><span id="bonus-cost">100,00</span> <span class="unit">DEMO</span></small></span><b>100×</b></button>
+  <div class="meter balance-meter"><span data-i18n="balance">Баланс</span><strong id="balance-output">—</strong><small class="unit">DEMO</small></div>
+  <div class="bet-control"><label for="bet-select" data-i18n="bet">Общая ставка</label><div class="bet-stepper"><button id="bet-minus" type="button" disabled data-label="decreaseBet">−</button><select id="bet-select" disabled data-label="chooseBet"><option>1,00</option></select><button id="bet-plus" type="button" disabled data-label="increaseBet">+</button></div><small class="unit">DEMO</small></div>
+  <div class="meter win-meter"><span data-i18n="win">Выигрыш</span><strong id="win-output">0,00</strong><small class="unit">DEMO</small></div>
+  <div class="spin-controls"><button class="auto-button" id="auto-button" type="button" disabled data-label="autoplay"><img src="../../assets/runtime/ui/icon_autoplay.png" alt=""><span id="auto-count" hidden></span></button><button class="spin-button" id="spin-button" type="button" disabled><img src="../../assets/runtime/ui/icon_spin.png" alt=""><span data-i18n="spin">Вращать</span></button><button class="turbo-button" id="turbo-button" type="button" aria-pressed="false" data-label="turbo"><img src="../../assets/runtime/ui/icon_turbo.png" alt=""></button></div>
+ </section>
+ <div class="status-row"><span class="status-dot" aria-hidden="true"></span><p id="game-status" role="status" aria-live="polite" data-i18n="loading">Подготовка игры…</p><span class="keyboard-hint" data-i18n="spaceHint">Пробел — вращать или перейти к итогу</span></div>
+ <section class="error-panel" id="error-panel" hidden><div><strong data-i18n="errorTitle">Не удалось продолжить</strong><p id="error-message"></p></div><button id="retry-button" type="button" data-i18n="retry">Повторить</button></section>
+</main>
+<dialog id="settings-dialog" aria-labelledby="settings-title" class="game-dialog">
+ <div class="dialog-top"><h1 id="settings-title" data-i18n="settings">Настройки</h1><button class="close-button" data-close type="button" data-label="close">×</button></div>
+ <label class="setting-row"><span data-i18n="language">Язык</span><select id="language-select"><option value="ru">Русский</option><option value="en">English</option></select></label>
+ <label class="setting-row"><span><strong data-i18n="turbo">Турбо ×3</strong><small data-i18n="turboHelp">Ускоряет анимации, не меняя результат раунда.</small></span><input type="checkbox" id="turbo-setting"></label>
+ <label class="setting-row"><span><strong data-i18n="reducedMotion">Меньше движения</strong><small data-i18n="motionHelp">Убирает вращение, вспышки и длинные эффекты.</small></span><input type="checkbox" id="motion-setting"></label>
+ <p class="demo-explanation" data-i18n="demoDetails"></p>
+</dialog>
+<dialog id="buy-dialog" aria-labelledby="buy-title" class="game-dialog buy-dialog">
+ <div class="dialog-top"><h1 id="buy-title" data-i18n="bonusName">Разрытые могилы</h1><button class="close-button" data-close type="button" data-label="close">×</button></div>
+ <img class="bonus-coffin" src="../../assets/runtime/symbols/sym_S_coffin.png" alt="">
+ <p data-i18n="bonusDescription"></p><div class="purchase-quote"><span data-i18n="bonusCost">Стоимость</span><strong id="purchase-cost">100,00</strong><small class="unit">DEMO · 100×</small></div><p class="purchase-warning" data-i18n="buyWarning"></p>
+ <div class="dialog-actions"><button data-close type="button" data-i18n="cancel" autofocus>Отмена</button><button id="confirm-buy" type="button" class="primary-button">Купить</button></div>
+</dialog>
+<dialog id="auto-dialog" aria-labelledby="auto-title" class="game-dialog">
+ <div class="dialog-top"><h1 id="auto-title" data-i18n="autoplayTitle">Автоматические вращения</h1><button class="close-button" data-close type="button" data-label="close">×</button></div>
+ <label class="setting-row"><span data-i18n="autoplayCount">Количество вращений</span><select id="auto-quantity"><option>10</option><option>25</option><option>50</option></select></label>
+ <label class="setting-row"><span data-i18n="autoplayStopBonus">Остановиться при бонусе</span><input id="auto-stop-bonus" type="checkbox" checked></label><p class="demo-explanation" data-i18n="autoplayInfo"></p>
+ <div class="dialog-actions"><button data-close type="button" data-i18n="cancel">Отмена</button><button class="primary-button" id="start-auto" type="button" data-i18n="startAutoplay">Начать</button></div>
+</dialog>
+<dialog id="rules-dialog" aria-labelledby="rules-title" class="game-dialog rules-dialog">
+ <div class="dialog-top"><h1 id="rules-title" data-i18n="rules">Правила</h1><button class="close-button" data-close type="button" data-label="close">×</button></div>
+ <div class="rules-tabs" role="tablist" data-label="rules"><button role="tab" id="tab-rules" aria-controls="panel-rules" aria-selected="true" data-tab="rules" data-i18n="rules">Правила</button><button role="tab" id="tab-paytable" aria-controls="panel-paytable" aria-selected="false" tabindex="-1" data-tab="paytable" data-i18n="paytable">Выплаты</button><button role="tab" id="tab-lines" aria-controls="panel-lines" aria-selected="false" tabindex="-1" data-tab="lines" data-i18n="lines">Линии</button></div>
+ <section role="tabpanel" id="panel-rules" aria-labelledby="tab-rules" tabindex="0"><h2 data-i18n="baseGame">Базовая игра</h2><p data-i18n="rulesIntro"></p><p data-i18n="wildRule"></p><h2 data-i18n="freeSpins">Бесплатные вращения</h2><p data-i18n="scatterRule"></p><p data-i18n="graveRule"></p><p class="rule-example" data-i18n="graveExample"></p><p data-i18n="capRule"></p><p data-i18n="bonusRules"></p><p id="rtp-note"></p><p class="demo-explanation" data-i18n="demoDetails"></p></section>
+ <section role="tabpanel" id="panel-paytable" aria-labelledby="tab-paytable" tabindex="0" hidden><p data-i18n="paytableHint"></p><div id="paytable-list" class="paytable-list"></div></section>
+ <section role="tabpanel" id="panel-lines" aria-labelledby="tab-lines" tabindex="0" hidden><p data-i18n="lineHint"></p><div id="line-preview" role="img"></div><div id="line-list" class="line-list"></div></section>
+</dialog>
+<script type="module" src="./app.mjs"></script>
+</body></html>
