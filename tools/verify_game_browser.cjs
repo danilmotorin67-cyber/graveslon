@@ -124,7 +124,8 @@ async function audit(browser,{baseURL='http://127.0.0.1:8767',outputDir=path.joi
  assert.deepEqual(errors,[]);assert.deepEqual(httpErrors,[]);
  const motion=await require('./verify_motion_browser.cjs').audit(browser,{baseURL,outputDir});
  const bonusReport=await require('./verify_bonus_browser.cjs').audit(browser,{baseURL,outputDir});
- return {status:'PASS',results,motion,bonus:bonusReport,consoleErrors:errors,httpErrors,limitations:['Demo credits and fixed illustrative books only','RGS, audio and physical-device testing deferred']};
+ const mortimer=await require('./verify_mortimer_browser.cjs').audit(browser,{baseURL,outputDir});
+ return {status:'PASS',results,motion,bonus:bonusReport,mortimer,consoleErrors:errors,httpErrors,limitations:['Demo credits and fixed illustrative books only','RGS, audio and physical-device testing deferred']};
 }
 module.exports={audit};
 if(require.main===module){

@@ -1,28 +1,36 @@
-✔ grave explanation uses padded winning positions and excludes inactive and unrelated graves (2.862407ms)
-✔ a real capped award keeps its raw explanation separate from the credited amount (7.831299ms)
-✔ zero-win bonus completion restores the base scene after the result event (3.187016ms)
-✔ every real QA book replays to its authoritative total, including zero and cap (78.065613ms)
-✔ resume at every event boundary restores the same final state and grave map (1407.056039ms)
-✔ graves persist beneath replacement symbols and round totals replace, not accumulate (0.635548ms)
-✔ new rounds reset grave state and free-spin counters (9.522581ms)
-✔ finish skips effects while processing every remaining event exactly once (2.555775ms)
-✔ stop interrupts cleanly and a subsequent play starts from a clean state (3.473899ms)
-✔ invalid books fail before displaying a frame; unsupported events are never silently ignored (2.20867ms)
-✔ credit formatting and payouts preserve fractional credits and large integers (23.953501ms)
-✔ demo base examples are real non-feature books; bonus examples always trigger (0.340754ms)
-✔ debit, immutable book, idempotent completion and a single pending round (1.732243ms)
-✔ bonus costs exactly 100 bets and insufficient funds never change the wallet (4.947601ms)
-✔ invalid books fail before any debit or sequence advance (6.044516ms)
-✔ bet changes and overlapping spins are locked throughout an accepted round (2.227499ms)
-✔ a rendering failure resumes the same round without a second debit (2.404656ms)
-✔ an ambiguous completion is retried without replaying or crediting twice (1.202413ms)
-✔ idle insufficient-funds errors remain recoverable by choosing a lower bet (1.149593ms)
-✔ both languages cover the same UI and display rules retain the canonical contract (1.745852ms)
-ℹ tests 20
+✔ grave explanation uses padded winning positions and excludes inactive and unrelated graves (2.180334ms)
+✔ a real capped award keeps its raw explanation separate from the credited amount (3.831061ms)
+✔ zero-win bonus completion restores the base scene after the result event (3.83628ms)
+✔ every real QA book replays to its authoritative total, including zero and cap (65.185425ms)
+✔ resume at every event boundary restores the same final state and grave map (1409.627156ms)
+✔ graves persist beneath replacement symbols and round totals replace, not accumulate (0.607114ms)
+✔ new rounds reset grave state and free-spin counters (13.280135ms)
+✔ finish skips effects while processing every remaining event exactly once (3.01389ms)
+✔ stop interrupts cleanly and a subsequent play starts from a clean state (3.133891ms)
+✔ invalid books fail before displaying a frame; unsupported events are never silently ignored (2.92786ms)
+✔ credit formatting and payouts preserve fractional credits and large integers (22.571577ms)
+✔ demo base examples are real non-feature books; bonus examples always trigger (0.289016ms)
+✔ debit, immutable book, idempotent completion and a single pending round (1.41438ms)
+✔ bonus costs exactly 100 bets and insufficient funds never change the wallet (2.053363ms)
+✔ invalid books fail before any debit or sequence advance (2.746447ms)
+✔ bet changes and overlapping spins are locked throughout an accepted round (1.846141ms)
+✔ a rendering failure resumes the same round without a second debit (1.832711ms)
+✔ an ambiguous completion is retried without replaying or crediting twice (0.884102ms)
+✔ idle insufficient-funds errors remain recoverable by choosing a lower bet (1.005394ms)
+✔ both languages cover the same UI and display rules retain the canonical contract (1.06914ms)
+✔ two-bone arms reach a fixed grip while keeping both segment lengths (1.371777ms)
+✔ unreachable arm targets are clamped without breaking bones or generating NaN (0.240642ms)
+✔ texture joint matrices map both painted joint centers to the skeleton (0.303808ms)
+✔ gesture curves join continuously through preparation, action, hold and return (0.340623ms)
+✔ repeated small payouts never trigger large arm gestures (0.673725ms)
+✔ a large-win salute is limited per round and across rapid round restarts (0.317318ms)
+✔ a bonus purchase does not salute a payout below its purchase cost (0.220693ms)
+✔ important reactions wait for a gesture return and pending cues clear on skip (0.262626ms)
+ℹ tests 28
 ℹ suites 0
-ℹ pass 20
+ℹ pass 28
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1582.161142
+ℹ duration_ms 1657.282936

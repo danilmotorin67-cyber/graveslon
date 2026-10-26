@@ -308,6 +308,26 @@
       "sha256": "cbd67344373b7d44763f399c953fc9693c4d1953f7b8cac182d00e6949a9ae11"
     },
     {
+      "path": "runtime/characters/mortimer-rig/core.png",
+      "role": "character_rig_atlas",
+      "source": "source/mortimer-rig/core.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 2185366,
+      "sha256": "2c3d3982f44f7cb441cac7483f0d5864fbeac0a21a354f7fe54e5887fbbb44c4"
+    },
+    {
+      "path": "runtime/characters/mortimer-rig/limbs.png",
+      "role": "character_rig_atlas",
+      "source": "source/mortimer-rig/limbs.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "bytes": 2154973,
+      "sha256": "db289063dd51ff0a0a4998f5d09be9de024d720407636d6211c7f564d9215481"
+    },
+    {
       "path": "runtime/environment/ground_mortimer.png",
       "role": "ground_support",
       "source": "source/ground_mortimer.png",

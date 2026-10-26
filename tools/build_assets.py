@@ -249,6 +249,14 @@ def main():
         save(out,'backgrounds/'+source.stem+'.jpg','background','source/'+source.name,upscaled=original.width<size[0] or original.height<size[1])
     for source in sorted(SOURCE.glob('mortimer_*.png')):
         save(resize(Image.open(source).convert('RGBA'),(768,1152)),'characters/'+source.name,'character','source/'+source.name)
+    # Generated rig sheets are immutable textures; runtime clipping uses SVG.
+    # Copy their original bytes without cropping, repainting or resampling.
+    for name in ('core.png','limbs.png'):
+        source=SOURCE/'mortimer-rig'/name
+        target=RUNTIME/'characters/mortimer-rig'/name
+        target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_bytes(source.read_bytes())
+        record(target,'character_rig_atlas','source/mortimer-rig/'+name)
     save(resize(Image.open(SOURCE/'ground_mortimer.png').convert('RGBA'),(1152,384)),
          'environment/ground_mortimer.png','ground_support','source/ground_mortimer.png')
     logo=build_ui()

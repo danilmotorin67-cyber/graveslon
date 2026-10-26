@@ -43,7 +43,7 @@ async function audit(browser,{baseURL,outputDir}){
   }
   seen.levels=[...new Set(seen.levels)].sort((a,b)=>a-b);seen.poses=[...new Set(seen.poses)].sort();return seen;
  });
- assert.ok(coverage.persistentNonWild>0);assert.ok(coverage.retriggers>0);assert.equal(coverage.results,10);assert.deepEqual(coverage.levels,[2,3,5,10]);assert.deepEqual(coverage.poses,['bonus','idle','win']);
+ assert.ok(coverage.persistentNonWild>0);assert.ok(coverage.retriggers>0);assert.equal(coverage.results,10);assert.deepEqual(coverage.levels,[2,3,5,10]);assert.deepEqual(coverage.poses,['rig']);
  checks.push({name:'all 10 books: grave maps, non-wild replacements, retriggers, all levels and base-scene restoration',status:'PASS',coverage});await maps.close();
  // Observe the visible upgrade, not only the final replay state.
  for(const level of [3,10]){
@@ -84,12 +84,12 @@ async function audit(browser,{baseURL,outputDir}){
   const source=fixtures.find(s=>s.key===key),end=source.book.events.find(e=>e.type==='freeSpinEnd'),page=await openLab();
   await page.evaluate(()=>{window.__overlays=[];let open=false;new MutationObserver(()=>{const el=document.querySelector('#overlay');if(!el.hidden&&!open)window.__overlays.push(el.dataset.kind);open=!el.hidden;}).observe(document.querySelector('#overlay'),{attributes:true});});
   await start(page,key,end.index);await page.waitForSelector('#overlay[data-kind=bonus-result]:not([hidden])');
-  if(end.amount===0)assert.equal(await page.locator('.mortimer-actor').getAttribute('data-pose'),'idle');
+  if(end.amount===0)assert.equal(await page.locator('.mortimer-actor').getAttribute('data-cue'),'idle');
   assert.equal(await page.locator('.stage').getAttribute('data-bonus'),'active','retain the bonus scene while showing its result');
   await page.evaluate(()=>window.animationLab.player.skip());await page.evaluate(()=>window.__playing);
   assert.deepEqual(await page.evaluate(()=>window.__overlays),['bonus-result']);
   assert.equal(await page.locator('.stage').getAttribute('data-bonus'),'complete');assert.equal(await page.locator('.dug,.grave-contributing,.grave-change,.mortimer-echo,.scene-transition').count(),0);
-  assert.equal(await page.locator('.mortimer-actor').getAttribute('data-pose'),'idle');
+  assert.equal(await page.locator('.mortimer-actor').getAttribute('data-pose'),'rig');
   assert.equal(await page.evaluate(()=>window.animationLab.player.state.total),source.book.payoutMultiplier);
   checks.push({name:'single bonus result, clean exit and neutral return: '+key,status:'PASS'});await page.close();
  }
@@ -118,6 +118,16 @@ async function audit(browser,{baseURL,outputDir}){
   assert.ok(layout.formula.bottom<=layout.panel.top,name+' formula is covered by the controls: '+JSON.stringify(layout));assert.equal(layout.overlapsActor,false,name+' formula covers Mortimer');
   await page.waitForTimeout(300);await page.screenshot({path:path.join(outputDir,'bonus-formula-'+name+'.png'),fullPage:true});
   if(name==='desktop'||name==='desktop-compact'||name==='landscape'){
+   // Capture the short cap phase at the DOM transition. The remote test runner
+   // can otherwise miss it while processing an earlier skip/screenshot.
+   await page.evaluate(()=>{
+    window.__capLayout=null;
+    const observer=new MutationObserver(()=>{
+     const formula=document.querySelector('.grave-formula'),note=document.querySelector('.grave-cap-note');
+     if(formula.hidden||note.hidden)return;
+     window.__capLayout={formula:formula.getBoundingClientRect().bottom,panel:document.querySelector('.game-panel').getBoundingClientRect().top};observer.disconnect();
+    });observer.observe(document.querySelector('.stage'),{attributes:true,childList:true,subtree:true});
+   });
    const book=fixtures.find(s=>s.key==='bonus/multiplier_10').book;
    const cappedIndex=book.events.find(e=>e.type==='winInfo'&&e.wins.some(w=>w.win>0&&w.win<w.rawWin)).index;
    const ordinal=book.events.slice(0,cappedIndex).filter(e=>e.type==='updateFreeSpin').at(-1).amount;
@@ -130,12 +140,13 @@ async function audit(browser,{baseURL,outputDir}){
     },ordinal);
     if(reached)break;await page.waitForTimeout(30);
    }
-   await page.waitForSelector('.grave-cap-note:not([hidden])');
-   const clipped=await page.evaluate(()=>({formula:document.querySelector('.grave-formula').getBoundingClientRect().bottom,panel:document.querySelector('.game-panel').getBoundingClientRect().top}));
+   await page.waitForFunction(()=>!!window.__capLayout);
+   const clipped=await page.evaluate(()=>window.__capLayout);
    assert.ok(clipped.formula<=clipped.panel,name+' capped-award note is covered by controls: '+JSON.stringify(clipped));
-   await page.screenshot({path:path.join(outputDir,'bonus-cap-'+name+'.png'),fullPage:true});
+   if(await page.locator('.grave-cap-note:not([hidden])').isVisible())await page.screenshot({path:path.join(outputDir,'bonus-cap-'+name+'.png'),fullPage:true});
   }
-  await page.click('#spin-button');await page.waitForFunction(()=>document.body.dataset.state==='idle');
+  if(await page.locator('body').getAttribute('data-state')==='playing')await page.click('#spin-button');
+  await page.waitForFunction(()=>document.body.dataset.state==='idle');
   assert.equal(await page.locator('.bonus-hud').isVisible(),false);assert.equal(await page.locator('.dug,.grave-formula:not([hidden]),.grave-change,.mortimer-echo,.scene-transition').count(),0);
   checks.push({name:'real bonus intro, graves, formula layout and clean finish: '+name,status:'PASS'});await page.close();
  }

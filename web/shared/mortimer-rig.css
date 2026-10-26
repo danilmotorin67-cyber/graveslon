@@ -1,0 +1,3 @@
+.mortimer-actor.has-rig .mortimer-rig{position:relative;display:block;left:auto;bottom:auto;width:100%;height:100%;object-fit:contain;transform:none!important;animation:none!important;overflow:visible;filter:none}
+.mortimer-actor.has-rig:after{display:none}.mortimer-rig [data-part]{pointer-events:none}.mortimer-rig image{image-rendering:auto}
+.mortimer-actor.has-rig .mortimer-contact{display:none}

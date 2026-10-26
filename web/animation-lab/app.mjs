@@ -6,7 +6,7 @@ const media=matchMedia('(prefers-reduced-motion: reduce)');
 $('#reduced-motion').checked=media.matches;
 
 let currentMode='base';
-const {player,clock,preload,restore}=createStage($('.stage'),{
+const {player,clock,rig,preload,restore}=createStage($('.stage'),{
   mode:()=>currentMode,
   motionFactor:()=>$('#reduced-motion').checked?0:($('#turbo').checked&&!$('#disabled-turbo').checked?1/3:1),
   onRestore:()=>$('#event-list').replaceChildren(),
@@ -58,5 +58,5 @@ try{
   for(const scenario of scenarios){const option=document.createElement('option');option.value=scenario.key;option.textContent=`${scenario.mode} · ${labels[scenario.label]}`;$('#scenario').append(option);}
   await preload();
   restore(player.state);busy(false);$('#status').textContent='Готово. Выбери контрольный сценарий и нажми «Проиграть».';
-  window.animationLab={player,scenarios,play,clock};
+  window.animationLab={player,scenarios,play,clock,rig};
 }catch(error){$('#status').textContent='Ошибка загрузки: '+error.message;}

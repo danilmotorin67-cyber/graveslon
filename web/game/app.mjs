@@ -49,7 +49,7 @@ function applyLanguage(){
  }
  if(rules)renderRules();
  if(rules){
-  $('.mortimer').alt=rules.symbols.M[prefs.language==='ru'?0:1];
+  $('.mortimer').setAttribute('aria-label',rules.symbols.M[prefs.language==='ru'?0:1]);
   all('.stage .symbol').forEach(im=>{im.alt=rules.symbols[im.dataset.symbol]?.[prefs.language==='ru'?0:1]||im.dataset.symbol;});
  }
  stage?.refreshText();render();fullscreenLabel();

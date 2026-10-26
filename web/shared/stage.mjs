@@ -1,5 +1,6 @@
 import {BookPlayer,TIMINGS} from '../animation-lab/book-player.mjs';
 import {createBonusPresentation} from './bonus-presentation.mjs';
+import {createMortimerRig} from './mortimer-rig.mjs';
 export const ASSET_ROOT=new URL('../../assets/runtime/',import.meta.url).href;
 const FILES={L1:'candle',L2:'key',L3:'raven',L4:'poison',H1:'lantern',H2:'bat',H3:'cat',H4:'widow',M:'mortimer',W:'hand',S:'coffin'};
 export const symbolPath=(id,blur=false)=>`${ASSET_ROOT}${blur?'symbols_blur':'symbols'}/sym_${id}_${FILES[id]}.png`;
@@ -59,6 +60,7 @@ class MotionClock {
 }
 
 const clock=new MotionClock();
+const rig=createMortimerRig($('.mortimer-actor'),{motionFactor:()=>clock.factor()});
 const reels=[],cells=[];
 for(let r=0;r<5;r++){
   const reel=document.createElement('div');reel.className='reel';reels.push(reel);cells[r]=[];
@@ -97,21 +99,6 @@ function highlight(wins){
 function clearAwards(){
   bonus?.clearContributions();
   award=null;readout.hidden=true;delete readout.dataset.line;highlight([]);$('#lines').replaceChildren();
-}
-async function character(pose,reaction='calm'){
-  const actor=$('.mortimer-actor'),sprite=$('.mortimer');actor.dataset.reaction=reaction;
-  if(actor.dataset.pose===pose)return;
-  // Only opacity changes: the actor box and the planted soles never translate.
-  for(const animation of sprite.getAnimations())if(!(animation instanceof CSSAnimation)){try{animation.finish();}catch{animation.cancel();}}
-  const previous=actor.dataset.pose;
-  actor.dataset.pose=pose;
-  if(clock.skipped||!clock.factor()||!previous){sprite.src=`${ROOT}characters/mortimer_${pose}.png`;return;}
-  const echo=sprite.cloneNode();echo.className='mortimer-echo';echo.alt='';echo.setAttribute('aria-hidden','true');actor.append(echo);
-  sprite.src=`${ROOT}characters/mortimer_${pose}.png`;
-  try{await Promise.all([
-    clock.animate(echo,[{opacity:1},{opacity:0}],{duration:260,easing:'ease-out'}),
-    clock.animate(sprite,[{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'}),
-  ]);}finally{echo.remove();}
 }
 function drawCell(state,r,y,{holdBonus=false}={}){
     const id=state.board[r][y],cell=cells[r][y],im=cell.querySelector('.symbol');
@@ -172,18 +159,19 @@ async function overlay(asset,value,label='',counter=false,settings={}){
   }finally{$('#overlay').hidden=true;}
 }
 
-bonus=createBonusPresentation(root,{clock,cells,readout,format,text,renderCell:drawCell,character});
+bonus=createBonusPresentation(root,{clock,cells,readout,format,text,renderCell:drawCell});
 
 const renderer={
-  skip(){clock.skip();},
-  restore(state){cleanup();draw(state);character(state.totalFs&&!state.bonusEnded?'bonus':'idle');options.onRestore?.();},
+  skip(){clock.skip();rig.skip();},
+  restore(state){cleanup();rig.restore({resume:state.index>=0});draw(state);options.onRestore?.();},
   async event(event,before,after,{instant}){
     clock.begin(instant);
+    rig.event(event,before,after,{instant:instant||!clock.factor(),cost:options.mode?.()==='bonus'?10000:100});
     const previousScene=event.type==='freeSpinTrigger'?captureScene():null;
     draw(after,{deferReels:['reveal','graveMultiplierUpdate'].includes(event.type),holdBonus:event.type==='freeSpinEnd'});
     options.onEvent?.(event,before,after);
     if(event.type==='reveal'){
-      clearAwards();const pose=character(after.gameType==='freegame'?'bonus':'idle');
+      clearAwards();
       await Promise.all(reels.map(async(reel,r)=>{
         if(clock.skipped||!clock.factor()){drawReel(after,r);return;}
         reel.classList.add('spinning');
@@ -214,13 +202,11 @@ const renderer={
           if(id==='S')await clock.animate(im,[{transform:'rotate(-5deg)',filter:'drop-shadow(0 0 12px #b779ff)'},{transform:'rotate(5deg)',filter:'drop-shadow(0 0 18px #b779ff)'},{transform:'rotate(0)',filter:'drop-shadow(0 0 0 transparent)'}],{duration:TIMINGS.scatter});
         }));
       }));
-      await pose;
     }else if(event.type==='graveMultiplierUpdate'){
       await bonus.updateGraves(event,before,after);
     }else if(event.type==='winInfo'){
       const paid=event.wins.filter(w=>w.win>0);
       clearAwards();
-      const pose=paid.length?character('win','win'):Promise.resolve();
       const duration=Math.max(360,Math.min(TIMINGS.line,3200/Math.max(1,paid.length)));
       for(const [index,win] of paid.entries()){
         if(clock.skipped||!clock.factor())break;
@@ -241,44 +227,41 @@ const renderer={
       }
       bonus.clearContributions();$('#lines').replaceChildren();delete readout.dataset.line;highlight(paid);
       if(paid.length)showAward('spinAward',event.totalWin,paid.length>1?'linesPaid':'',{count:paid.length});
-      await pose;
     }else if(event.type==='setWin'){
       if(event.amount>0)showAward('spinAward',event.amount);
     }else if(event.type==='freeSpinTrigger'){
-      await Promise.all([character('bonus','entry'),fadeScene(previousScene),overlay('bonus_entry',String(event.totalFs),text('bonusName'),false,{
+      await Promise.all([fadeScene(previousScene),overlay('bonus_entry',String(event.totalFs),text('bonusName'),false,{
         kind:'bonus-entry',kicker:text('bonusKicker'),detail:text('bonusIntroHelp'),
       })]);
     }else if(event.type==='updateFreeSpin'){
       await bonus.pulseCounter();
     }else if(event.type==='freeSpinRetrigger'){
-      await Promise.all([character('bonus','retrigger'),bonus.pulseCounter(),overlay('bonus_entry','+'+(event.totalFs-before.totalFs),text('bonusRetriggerTitle'),false,{
+      await Promise.all([bonus.pulseCounter(),overlay('bonus_entry','+'+(event.totalFs-before.totalFs),text('bonusRetriggerTitle'),false,{
         kind:'bonus-retrigger',kicker:text('bonusRetriggerKicker'),detail:text('bonusRetriggerHelp',{total:event.totalFs}),
       })]);
     }else if(event.type==='freeSpinEnd'){
       const detail=after.capped?text('bonusCapHelp'):text('bonusResultHelp',{played:after.fs,total:after.totalFs});
-      await Promise.all([character(event.amount>0?'win':'idle',event.amount>0?'result':'calm'),overlay('bonus_result',event.amount,text('bonus_result'),true,{
+      await overlay('bonus_result',event.amount,text('bonus_result'),true,{
         kind:'bonus-result',kicker:text('bonusFinished'),detail:detail+(after.total!==event.amount?'\n'+text('bonusRoundTotal',{amount:format(after.total)}):''),counterDuration:2400,hold:850,
-      })]);
+      });
       const scene=captureScene();clearAwards();draw(after);
-      await Promise.all([fadeScene(scene),character('idle')]);
+      await fadeScene(scene);
     }else if(event.type==='finalWin'){
       if(event.amount>0)showAward(after.totalFs?'roundAward':'spinAward',event.amount);
       else clearAwards();
       // Celebration policy uses the already credited total, never computes an award.
       const cost=options.mode?.()==='bonus'?10000:100;
       if(!after.totalFs&&event.amount>cost && event.amount>=2000){
-        await character('win','result');
         await overlay(event.amount>=10000?'epic_win':event.amount>=5000?'mega_win':'big_win',event.amount,'',true);
       }
-      await character('idle');
     }
   }
 };
 const player=new BookPlayer(renderer);
 
 async function preload(){
-  const sources=[`${ROOT}environment/ground_mortimer.png`,...Object.keys(FILES).flatMap(id=>[path(id),path(id,true)]),...['idle','bonus','win'].map(p=>`${ROOT}characters/mortimer_${p}.png`),...['bonus_entry','bonus_result','big_win','mega_win','epic_win'].map(p=>`${ROOT}ui/${p}.png`),...['base','bonus'].flatMap(m=>['landscape','portrait'].map(o=>`${ROOT}backgrounds/bg_${m}_${o}.jpg`))];
-  await Promise.all(sources.map(async src=>{const im=new Image();im.src=src;await im.decode();}));
+  const sources=[`${ROOT}environment/ground_mortimer.png`,...Object.keys(FILES).flatMap(id=>[path(id),path(id,true)]),...['bonus_entry','bonus_result','big_win','mega_win','epic_win'].map(p=>`${ROOT}ui/${p}.png`),...['base','bonus'].flatMap(m=>['landscape','portrait'].map(o=>`${ROOT}backgrounds/bg_${m}_${o}.jpg`))];
+  await Promise.all([rig.preload(),...sources.map(async src=>{const im=new Image();im.src=src;await im.decode();})]);
 }
-return {player,clock,preload,draw,character,refreshText,restore:state=>renderer.restore(state)};
+return {player,clock,rig,preload,draw,refreshText,restore:state=>renderer.restore(state)};
 }

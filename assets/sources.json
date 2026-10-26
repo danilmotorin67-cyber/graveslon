@@ -286,6 +286,62 @@
           "promptFile": "assets/grounding-contrast-prompt-20261021.txt"
         }
       ]
+    },
+    {
+      "path": "assets/source/mortimer-rig/core.png",
+      "role": "character_rig_atlas",
+      "sha256": "2c3d3982f44f7cb441cac7483f0d5864fbeac0a21a354f7fe54e5887fbbb44c4",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-26",
+      "origin": "Imagegen image edits of the approved Mortimer idle character",
+      "reference": "assets/source/mortimer_idle.png",
+      "promptStatus": "Prompts and preparation notes: assets/source/mortimer-rig/PROMPTS.md"
+    },
+    {
+      "path": "assets/source/mortimer-rig/drafts/core-first.png",
+      "role": "character_rig_draft",
+      "sha256": "381161efc5bf900c86fc2a101cb967de2e2c4c748755d7ef97f01803b85f5119",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-26",
+      "origin": "Imagegen image edits of the approved Mortimer idle character",
+      "reference": "assets/source/mortimer_idle.png",
+      "promptStatus": "Prompts and preparation notes: assets/source/mortimer-rig/PROMPTS.md"
+    },
+    {
+      "path": "assets/source/mortimer-rig/drafts/limbs-first.png",
+      "role": "character_rig_draft",
+      "sha256": "9b988126da5b95a8579922dde5c37da5593d17beab1820941fd385c124468f2c",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-26",
+      "origin": "Imagegen image edits of the approved Mortimer idle character",
+      "reference": "assets/source/mortimer_idle.png",
+      "promptStatus": "Prompts and preparation notes: assets/source/mortimer-rig/PROMPTS.md"
+    },
+    {
+      "path": "assets/source/mortimer-rig/limbs.png",
+      "role": "character_rig_atlas",
+      "sha256": "db289063dd51ff0a0a4998f5d09be9de024d720407636d6211c7f564d9215481",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "createdAt": "2026-10-26",
+      "origin": "Imagegen image edits of the approved Mortimer idle character",
+      "reference": "assets/source/mortimer_idle.png",
+      "promptStatus": "Prompts and preparation notes: assets/source/mortimer-rig/PROMPTS.md"
     }
   ]
 }

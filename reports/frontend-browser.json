@@ -176,9 +176,7 @@
             10
           ],
           "poses": [
-            "bonus",
-            "idle",
-            "win"
+            "rig"
           ],
           "results": 10
         }
@@ -245,6 +243,53 @@
       }
     ],
     "consoleErrors": []
+  },
+  "mortimer": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "idle head, cloth and fire with fixed painted contacts: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "jointed lantern gesture preserves feet and shovel grip: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "continuous salute reaches the brim without changing textures: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "look cue and reduced-motion still frame: desktop",
+        "status": "PASS"
+      },
+      {
+        "name": "idle head, cloth and fire with fixed painted contacts: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "jointed lantern gesture preserves feet and shovel grip: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "continuous salute reaches the brim without changing textures: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "look cue and reduced-motion still frame: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "new rounds preserve the ongoing gesture rather than resetting the body",
+        "status": "PASS"
+      },
+      {
+        "name": "real small-win round keeps one rig and all original texture sources",
+        "status": "PASS"
+      }
+    ],
+    "consoleErrors": [],
+    "legacyCharacterRequests": []
   },
   "consoleErrors": [],
   "httpErrors": [],

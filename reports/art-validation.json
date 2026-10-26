@@ -1,8 +1,8 @@
 {
   "status": "PASS",
-  "sourceFiles": 20,
-  "runtimeAssets": 57,
-  "runtimeBytes": 14961675,
+  "sourceFiles": 24,
+  "runtimeAssets": 59,
+  "runtimeBytes": 19302014,
   "roleCounts": {
     "symbol": 11,
     "symbol_blur": 11,
@@ -17,7 +17,8 @@
     "multiplier_preview": 4,
     "cover_draft": 3,
     "bonus_screen": 2,
-    "ground_support": 1
+    "ground_support": 1,
+    "character_rig_atlas": 2
   },
   "checks": [
     "Source and runtime SHA-256",
@@ -28,13 +29,13 @@
   "visualReview": [
     "All 11 symbols reviewed at 120 px in colour and grayscale",
     "Desktop and portrait static layouts",
-    "Three poses: two arms, two legs, no cropped hat or boots",
+    "Legacy poses retained; active character uses 14 articulated parts from two atlases",
     "Base/bonus backgrounds preserve scene layout"
   ],
   "limitations": [
-    "Art-stage candidate only; no animation, audio or playable frontend",
+    "Asset integrity report; joint animation and game UI are verified separately",
     "Cover dimensions await the Engine dashboard",
-    "Recovered original prompts are unavailable",
+    "Recovered original prompts are unavailable; new rig prompts are retained",
     "Base backgrounds and bonus backgrounds are upscaled exports; source pixels retained"
   ],
   "publication": "File validation does not establish GitHub publication or platform approval"

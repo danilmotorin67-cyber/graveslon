@@ -9,7 +9,7 @@ export function graveWinDetails(win,graves){
     raw:win.rawWin,credited:win.win,capped:win.win<win.rawWin};
 }
 
-export function createBonusPresentation(root,{clock,cells,readout,format,text,renderCell,character}){
+export function createBonusPresentation(root,{clock,cells,readout,format,text,renderCell}){
   const $=s=>root.querySelector(s);
   const make=(tag,className,parent)=>{const el=document.createElement(tag);el.className=className;parent?.append(el);return el;};
   const hud=$('#feature-counter')||make('div','feature-counter',root);
@@ -72,9 +72,8 @@ export function createBonusPresentation(root,{clock,cells,readout,format,text,re
   async function updateGraves(event,before,after){
     const hasUpgrade=event.positions.some(p=>before.graves[p.reel][p.row-1]>0);
     toastKey=hasUpgrade?'gravesStrengthen':'gravesOpen';toast.textContent=text(toastKey);toast.hidden=clock.skipped||!clock.factor();
-    const pose=character('bonus','dig');
     try{
-      await Promise.all([pose,...event.positions.map(async(p,i)=>{
+      await Promise.all(event.positions.map(async(p,i)=>{
         const cell=cells[p.reel][p.row-1],previous=before.graves[p.reel][p.row-1],next=event.multipliers[i];
         renderCell(after,p.reel,p.row-1);
         const kind=previous===0?'grave-opening':previous===next?'grave-holding':'grave-upgrading';cell.classList.add(kind);
@@ -86,7 +85,7 @@ export function createBonusPresentation(root,{clock,cells,readout,format,text,re
             clock.animate(tag,[{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)',offset:.25},{opacity:1,transform:'translateY(-3px)',offset:.8},{opacity:0,transform:'translateY(-7px)'}],{duration:860,easing:'ease-out'}),
           ]);
         }finally{tag.remove();cell.classList.remove(kind);}
-      })]);
+      }));
     }finally{toast.hidden=true;toastKey=null;}
   }
   async function pulseCounter(){await clock.animate(count,[{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:220,easing:'ease-out'});}

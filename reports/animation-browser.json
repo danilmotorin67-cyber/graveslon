@@ -50,9 +50,9 @@
   "skipToFinal": "PASS",
   "timing": {
     "cpuThrottle": 4,
-    "sampleFrames": 120,
+    "sampleFrames": 115,
     "medianFrameMs": 16.699999999999818,
-    "p95FrameMs": 16.799999999999727,
+    "p95FrameMs": 16.800000000000182,
     "finalTotal": 345,
     "expected": 345,
     "leftovers": 0
