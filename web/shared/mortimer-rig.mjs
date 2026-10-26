@@ -1,4 +1,5 @@
 import {RAD,clamp,mix,rotatePoint,transformPoint,solveArm,boneMatrix,MortimerReactions} from './mortimer-motion.mjs';
+import {createTextureMesh,sleeveWarp,stepPendant} from './mortimer-deformation.mjs';
 const NS='http://www.w3.org/2000/svg';
 const ROOT=new URL('../../assets/runtime/characters/mortimer-rig/',import.meta.url).href;
 export const RIG_TEXTURES=[ROOT+'core.png',ROOT+'limbs.png'];
@@ -33,10 +34,15 @@ export function createMortimerRig(actor,{motionFactor=()=>1}={}){
  const soften=svgElement('filter',{id:prefix+'-soft',x:'-20%',y:'-20%',width:'140%',height:'140%'},defs);svgElement('feGaussianBlur',{stdDeviation:1.25},soften);
  const contactGradient=svgElement('radialGradient',{id:prefix+'-contact'},defs);svgElement('stop',{offset:0,'stop-color':'#020707','stop-opacity':'.75'},contactGradient);svgElement('stop',{offset:1,'stop-color':'#020707','stop-opacity':0},contactGradient);
  for(const[x,y,rx,ry]of[[435,1528,75,13],[754,1526,75,13],[255,1528,33,11]])svgElement('ellipse',{cx:x,cy:y,rx,ry,fill:`url(#${prefix}-contact)`},svg);
- const parts={};
+ const parts={},meshes={},restBends={};
  function part(name){const data=PARTS[name],g=svgElement('g',{'data-part':name},svg),[x,y,w,h]=data.rect;
-  const viewport=svgElement('svg',{x:0,y:0,width:w,height:h,viewBox:`${x} ${y} ${w} ${h}`,overflow:'hidden'},g);
+  const deform=['torso','coatL','coatR','upperL','foreL','upperR','foreR'].includes(name);
+  const source=deform?svgElement('g',{id:prefix+'-'+name},defs):g;
+  const viewport=svgElement('svg',{x:0,y:0,width:w,height:h,viewBox:`${x} ${y} ${w} ${h}`,overflow:'hidden'},source);
   svgElement('image',{href:RIG_TEXTURES[data.sheet],x:0,y:0,width:1536,height:1024},viewport);parts[name]=g;return g;
+ }
+ function skin(name){const[, ,width,height]=PARTS[name].rect;
+  meshes[name]=createTextureMesh({group:parts[name],defs,source:prefix+'-'+name,width,height,id:prefix+'-'+name+'-mesh',element:svgElement,matrixText,rows:name.startsWith('coat')?5:6,columns:name==='torso'?2:1});
  }
  part('coatL');part('coatR');part('legs');part('shovel');part('torso');part('head');
  part('upperL');part('foreL');part('gripL');part('hatHand');part('upperR');part('foreR');
@@ -47,51 +53,68 @@ export function createMortimerRig(actor,{motionFactor=()=>1}={}){
  const fireOuter=svgElement('path',{fill:`url(#${prefix}-fire)`,opacity:'.8',filter:`url(#${prefix}-soft)`},fire),fireMiddle=svgElement('path',{fill:'#c1ee81',opacity:'.75',filter:`url(#${prefix}-soft)`},fire),fireCore=svgElement('path',{fill:'#ecffc3',opacity:'.9',filter:`url(#${prefix}-soft)`},fire);
  const sparks=[0,1,2].map(()=>svgElement('circle',{r:1.5,fill:'#defba2'},fire));
  part('gripR');
+ for(const name of ['torso','coatL','coatR','upperL','foreL','upperR','foreR'])skin(name);
  // Static contact points are in model coordinates; the shovel never translates.
  const tip={x:255,y:1526},shovelScale=1.8,shovelPivot={x:90,y:502},shovelAngle=.085;
  const shovelMatrix=rotateMatrix([shovelScale,0,0,shovelScale,tip.x-shovelPivot.x*shovelScale,tip.y-shovelPivot.y*shovelScale],tip,shovelAngle);
  const staffGrip=transformPoint(shovelMatrix,{x:92,y:52}),leftHandScale=.42,rightHandScale=.43,lanternScale=.8;
  const reactions=new MortimerReactions();
- let frame=0,timer=0,lastTime=null,lastWrist={x:810,y:500},lastVx=0,swing=0,swingVelocity=0,destroyed=false,lastReduced=false;
- const channels={lift:0,hat:0,look:0,nod:0,heat:0,tension:0};
+ let frame=0,timer=0,lastTime=null,pendant=null,cloth=0,destroyed=false,lastReduced=false;
+ const channels={lift:0,hat:0,look:0,nod:0,heat:0,tension:0,support:0,salute:0,attention:0};
  const state={cue:'idle',phase:0,contacts:{leftFoot:{x:435,y:1526},rightFoot:{x:754,y:1524.126},shovel:{...tip}},joints:{}};
  for(const[name,p]of Object.entries(state.contacts))svgElement('circle',{'data-anchor':name,cx:p.x,cy:p.y,r:1,visibility:'hidden'},svg);
  function setPart(name,m){parts[name].setAttribute('transform',matrixText(m));}
  setPart('legs',positioned(347,602,1.31,924/493));setPart('shovel',shovelMatrix);
- function hand(name,wrist,angle,scale){const p=PARTS[name].wrist,c=Math.cos(angle)*scale,s=Math.sin(angle)*scale;setPart(name,[c,s,-s,c,wrist.x-c*p.x+s*p.y,wrist.y-s*p.x-c*p.y]);}
- function arm(prefix,geometry){for(const[name,a,b]of[[`upper${prefix}`,geometry.shoulder,geometry.elbow],[`fore${prefix}`,geometry.elbow,geometry.wrist]])setPart(name,boneMatrix(a,b,PARTS[name].a,PARTS[name].b));}
+ function hand(name,wrist,angle,scale){const p=PARTS[name].wrist,c=Math.cos(angle)*scale,s=Math.sin(angle)*scale,m=[c,s,-s,c,wrist.x-c*p.x+s*p.y,wrist.y-s*p.x-c*p.y];setPart(name,m);return m;}
+ function arm(prefix,geometry,load=0){
+  const upper=Math.atan2(geometry.elbow.y-geometry.shoulder.y,geometry.elbow.x-geometry.shoulder.x),fore=Math.atan2(geometry.wrist.y-geometry.elbow.y,geometry.wrist.x-geometry.elbow.x);
+  const angle=Math.atan2(Math.sin(fore-upper),Math.cos(fore-upper));restBends[prefix]??=angle;
+  const bend=Math.atan2(Math.sin(angle-restBends[prefix]),Math.cos(angle-restBends[prefix]));
+  for(const[name,a,b,start]of[[`upper${prefix}`,geometry.shoulder,geometry.elbow,false],[`fore${prefix}`,geometry.elbow,geometry.wrist,true]]){
+   setPart(name,boneMatrix(a,b,PARTS[name].a,PARTS[name].b));
+   meshes[name](p=>sleeveWarp(p,PARTS[name].a,PARTS[name].b,{bend:start?-bend:bend,load,start}));
+  }
+ }
  function update(now,{snap=false}={}){
   const factor=motionFactor(),reduced=factor===0,dt=lastTime===null?1/60:clamp((now-lastTime)/1000,0,.035);lastTime=now;
   if(reduced)reactions.clear();
   const cue=reactions.sample(now);state.cue=cue.type;state.phase=reduced?0:now/1000;
   const t=state.phase;
-  for(const key of Object.keys(channels))channels[key]=snap||reduced?0:mix(channels[key],cue[key],1-Math.exp(-dt*20));
-  const {lift,hat,look,nod,heat,tension}=channels;
-  const torsoAngle=(reduced?0:.38*Math.sin(t*.79)-.7*hat-.6*lift+7*tension)*RAD,pivot={x:550,y:625};
+  for(const key of Object.keys(channels))channels[key]=snap||reduced?0:mix(channels[key],cue[key],1-Math.exp(-dt*24));
+  const {lift,hat,look,nod,heat,tension,support,salute,attention}=channels;
+  const breath=reduced?0:(1-Math.cos(t*Math.PI*2/6.4))*.5;
+  const torsoAngle=(reduced?0:.07*Math.sin(t*Math.PI*2/6.4)+.75*support-1.4*lift+.6*salute+4*tension)*RAD,pivot={x:550,y:625};
   const torsoMatrix=rotateMatrix(positioned(333,195,1.035,1.035),pivot,torsoAngle);setPart('torso',torsoMatrix);
-  setPart('coatL',rotateMatrix(positioned(95,566,.975,1.79),{x:410,y:590},(reduced?0:.55*Math.sin(t*.68-.9)+.3*hat)*RAD));
-  setPart('coatR',rotateMatrix(positioned(582,566,.88,1.79),{x:705,y:590},(reduced?0:.48*Math.sin(t*.61-1.7)-.3*lift)*RAD));
-  const headPivot=rotatePoint({x:545,y:273},pivot,torsoAngle),headAngle=(reduced?0:.75*Math.sin(t*.57+.5)+look*5.5+nod*1.3-hat*2.3+12*tension)*RAD;
-  const headMatrix=rotateMatrix(rotateMatrix(positioned(369,-1,.78),pivot,torsoAngle),headPivot,headAngle);setPart('head',headMatrix);
+  const warpTorso=p=>{const top=clamp((425-p.y)/300,0,1),right=clamp((p.x-190)/160,0,1)*top,left=clamp((190-p.x)/150,0,1)*top;
+   return{x:p.x+(p.x-190)*.004*breath*top-support*3*right,y:p.y-1.5*breath*top-14*support*right-5*salute*left};};
+  meshes.torso(warpTorso);
+  const bodyPoint=p=>transformPoint(torsoMatrix,warpTorso({x:(p.x-333)/1.035,y:(p.y-195)/1.035}));
+  cloth=reduced||snap?0:mix(cloth,torsoAngle/RAD+.45*support+.25*salute,1-Math.exp(-dt*3.6));
+  for(const[name,x,sx]of[['coatL',95,.975],['coatR',582,.88]]){
+   setPart(name,positioned(x,566,sx,1.79));
+   meshes[name](p=>{const w=clamp(p.y/512,0,1);return{x:p.x+cloth*6*w*w,y:p.y+Math.abs(cloth)*.8*Math.sin(w*Math.PI)};});
+  }
+  const headRigidPivot=rotatePoint({x:545,y:273},pivot,torsoAngle),headPivot=bodyPoint({x:545,y:273});
+  const headAngle=(reduced?0:.11*Math.sin(t*.45)+look*2.2+attention*.35+nod*.8-hat*.35+4*tension)*RAD;
+  const headBase=rotateMatrix(positioned(369,-1,.78),pivot,torsoAngle);headBase[4]+=headPivot.x-headRigidPivot.x;headBase[5]+=headPivot.y-headRigidPivot.y;
+  const headMatrix=rotateMatrix(headBase,headPivot,headAngle);setPart('head',headMatrix);
   const brim=transformPoint(headMatrix,{x:100,y:202});
-  const shoulderL=rotatePoint({x:387,y:326},pivot,torsoAngle),shoulderR=rotatePoint({x:648,y:333},pivot,torsoAngle);
+  const shoulderL=bodyPoint({x:387,y:326}),shoulderR=bodyPoint({x:648,y:333});
   const gripDelta=rotatePoint({x:(PARTS.gripL.grip.x-PARTS.gripL.wrist.x)*leftHandScale,y:(PARTS.gripL.grip.y-PARTS.gripL.wrist.y)*leftHandScale},{x:0,y:0},shovelAngle);
-  const restWristL={x:staffGrip.x-gripDelta.x,y:staffGrip.y-gripDelta.y},leftRest=solveArm(shoulderL,restWristL,205,165,1);
-  const pinchDelta={x:-(PARTS.hatHand.grip.x-PARTS.hatHand.wrist.x)*leftHandScale,y:-(PARTS.hatHand.grip.y-PARTS.hatHand.wrist.y)*leftHandScale};
-  const hatArm=solveArm(shoulderL,{x:brim.x-pinchDelta.x,y:brim.y-pinchDelta.y},205,165,-1);
-  let hatUpper=hatArm.upperAngle;while(hatUpper<leftRest.upperAngle)hatUpper+=Math.PI*2;
-  const upper=mix(leftRest.upperAngle,hatUpper,hat),fore=mix(leftRest.foreAngle,hatArm.foreAngle,hat);
-  const elbowL={x:shoulderL.x+205*Math.cos(upper),y:shoulderL.y+205*Math.sin(upper)},wristL={x:elbowL.x+165*Math.cos(fore),y:elbowL.y+165*Math.sin(fore)};
-  const left={shoulder:shoulderL,elbow:elbowL,wrist:wristL};arm('L',left);
+  const restWristL={x:staffGrip.x-gripDelta.x,y:staffGrip.y-gripDelta.y};
+  const handAngle=mix(shovelAngle,-Math.PI*.66,hat),pinchDelta=rotatePoint({x:(PARTS.hatHand.grip.x-PARTS.hatHand.wrist.x)*leftHandScale,y:(PARTS.hatHand.grip.y-PARTS.hatHand.wrist.y)*leftHandScale},{x:0,y:0},handAngle);
+  const target={x:brim.x-pinchDelta.x,y:brim.y-pinchDelta.y};
+  // Keep the wrist outside the shoulder's folding singularity. A direct path
+  // through the shoulder makes the elbow whip around despite a smooth hand.
+  const wristL={x:mix(restWristL.x,target.x,hat)-95*Math.sin(hat*Math.PI),y:mix(restWristL.y,target.y,hat)};
+  const left=solveArm(shoulderL,wristL,170,185,-1);arm('L',left,Math.max(0,salute));
   const free=clamp(hat*7,0,1);parts.gripL.setAttribute('opacity',1-free);parts.hatHand.setAttribute('opacity',free);
-  const handAngle=mix(shovelAngle,Math.PI,hat);hand('gripL',wristL,handAngle,leftHandScale);hand('hatHand',wristL,handAngle,leftHandScale);
-  const wristR={x:810-60*lift+(reduced?0:2*Math.sin(t*.61)),y:500-240*lift+(reduced?0:1.2*Math.sin(t*.77))};
-  const right=solveArm(shoulderR,wristR,180,170,1);arm('R',right);hand('gripR',wristR,0,rightHandScale);
-  const vx=dt?clamp((wristR.x-lastWrist.x)/dt,-700,700):0,ax=dt?clamp((vx-lastVx)/dt,-1500,1500):0;
-  if(reduced||snap){swing=0;swingVelocity=0;}else{swingVelocity+=(-17*swing-4.3*swingVelocity-ax*.0015+.012*Math.sin(t*.9))*dt;swing=clamp(swing+swingVelocity*dt,-.18,.18);}
-  lastWrist={...wristR};lastVx=vx;
-  const ringTop={x:wristR.x+.43,y:wristR.y+(283-142)*rightHandScale};
-  const lampMatrix=rotateMatrix(positioned(ringTop.x-151*lanternScale,ringTop.y-14*lanternScale,lanternScale),ringTop,swing);
+  hand('gripL',left.wrist,handAngle,leftHandScale);hand('hatHand',left.wrist,handAngle,leftHandScale);
+  const wristR={x:810-30*lift-6*Math.sin(clamp(lift,0,1)*Math.PI),y:500-115*lift};
+  const right=solveArm(shoulderR,wristR,180,170,1);arm('R',right,Math.max(0,support));
+  const rightHand=hand('gripR',right.wrist,-4*RAD*lift,rightHandScale),ringTop=transformPoint(rightHand,PARTS.gripR.grip);
+  pendant=stepPendant(pendant,ringTop,dt,{reset:reduced||snap});
+  const lampMatrix=rotateMatrix(positioned(ringTop.x-151*lanternScale,ringTop.y-14*lanternScale,lanternScale),ringTop,pendant.angle);
   lamp.setAttribute('transform',matrixText(lampMatrix));parts.lantern.removeAttribute('transform');
   const flicker=reduced?0:Math.sin(t*6.2)*3+Math.sin(t*9.7+1.3)*1.6;
   fireOuter.setAttribute('d',`M120 350 Q89 300 138 271 Q118 242 ${150+flicker} ${214-flicker} Q145 268 186 279 Q216 312 191 353 Z`);
@@ -100,6 +123,7 @@ export function createMortimerRig(actor,{motionFactor=()=>1}={}){
   sparks.forEach((el,i)=>{const p=reduced?.5:((t*.8+i/3)%1);el.setAttribute('cx',String(152+Math.sin(t*2+i)*14));el.setAttribute('cy',String(350-p*118));el.setAttribute('opacity',String(Math.sin(p*Math.PI)*.6));});
   fire.setAttribute('opacity',reduced?'.88':String(.86+.07*Math.sin(t*7.3)+heat*.07));aura.setAttribute('opacity',String(.6+heat*.35));
   state.joints={left:left,right:right,head:headPivot,brim,ring:ringTop,staffGrip};state.hat=hat;state.lift=lift;
+  state.support=support;state.attention=attention;state.gesturePhase=cue.phase;state.pendant={angle:pendant.angle,velocity:pendant.velocity};state.cloth=cloth;
   actor.dataset.cue=state.cue;
  }
  function tick(now){

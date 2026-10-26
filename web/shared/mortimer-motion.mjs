@@ -3,12 +3,25 @@ export const RAD=Math.PI/180;
 export const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 export const mix=(a,b,t)=>a+(b-a)*t;
 export function smooth(t){t=clamp(t,0,1);return t*t*(3-2*t);}
-export function envelope(t){
- if(t<=0||t>=1)return 0;
- if(t<.16)return -.055*Math.sin(t/.16*Math.PI);
- if(t<.46)return smooth((t-.16)/.3);
- if(t<.61)return 1;
- return 1-smooth((t-.61)/.39);
+export function track(keys,t){
+ if(t<=keys[0][0])return keys[0][1];
+ for(let i=1;i<keys.length;i++)if(t<=keys[i][0]){
+  const[a,v]=keys[i-1],[b,w]=keys[i],u=clamp((t-a)/(b-a),0,1),s=u*u*u*(u*(u*6-15)+10);
+  return mix(v,w,s);
+ }
+ return keys.at(-1)[1];
+}
+const REACH=[[0,0],[.12,0],[.21,-.025],[.51,1],[.67,1],[.96,0],[1,0]];
+const SUPPORT=[[0,0],[.035,0],[.15,-.1],[.36,1],[.69,1],[.9,0],[1,0]];
+const ATTENTION=[[0,0],[.025,0],[.24,1],[.72,1],[.98,0],[1,0]];
+export function gestureTracks(type,t,amplitude=1,target=0){
+ const active=t>0&&t<1,reach=active?track(REACH,t)*amplitude:0,support=active?track(SUPPORT,t)*amplitude:0,attention=active?track(ATTENTION,t)*amplitude:0;
+ const lamp=type==='lantern'||type==='look',salute=type==='hat';
+ return{type,phase:t,lift:lamp?reach*(type==='look'?.56:1):0,hat:salute?Math.max(0,reach):0,
+  look:type==='look'?attention*(.75+target):lamp?attention*.22:0,
+  nod:type==='acknowledge'?track([[0,0],[.22,.35],[.47,1],[.83,0],[1,0]],t)*amplitude:0,
+  heat:Math.max(0,reach),tension:salute?Math.max(0,-support):0,
+  support:lamp?support:0,salute:salute?support:0,attention:lamp?attention:0};
 }
 export function rotatePoint(p,pivot,angle){const c=Math.cos(angle),s=Math.sin(angle),x=p.x-pivot.x,y=p.y-pivot.y;return{x:pivot.x+x*c-y*s,y:pivot.y+x*s+y*c};}
 export function transformPoint(m,p){return{x:m[0]*p.x+m[2]*p.y+m[4],y:m[1]*p.x+m[3]*p.y+m[5]};}
@@ -26,7 +39,7 @@ export function boneMatrix(start,end,sourceStart,sourceEnd){
  return[a,b,-b,a,start.x-a*sourceStart.x+b*sourceStart.y,start.y-b*sourceStart.x-a*sourceStart.y];
 }
 export const GESTURES=Object.freeze({
- acknowledge:{duration:1050,priority:0},lantern:{duration:2400,priority:2},look:{duration:2400,priority:4},hat:{duration:2850,priority:3},
+ acknowledge:{duration:1150,priority:0},lantern:{duration:3000,priority:2},look:{duration:2900,priority:4},hat:{duration:3600,priority:3},
 });
 export class MortimerReactions{
  constructor(){this.reset();}
@@ -69,9 +82,7 @@ export class MortimerReactions{
  sample(now){
   let cue=this.active;
   if(cue&&now-cue.start>=cue.duration){this.active=null;const next=this.queued;this.queued=null;if(next)this.trigger(next.type,now,{...next,force:true});cue=this.active;}
-  if(!cue)return{type:'idle',lift:0,hat:0,look:0,nod:0,heat:0,tension:0};
-  const phase=(now-cue.start)/cue.duration,w=envelope(phase)*cue.amplitude;
-  return{type:cue.type,lift:cue.type==='lantern'?w:cue.type==='look'?w*.68:0,hat:cue.type==='hat'?Math.max(0,w):0,
-   look:cue.type==='look'?w*(.75+cue.target):0,nod:cue.type==='acknowledge'?Math.sin(clamp(phase,0,1)*Math.PI)*cue.amplitude:0,heat:Math.max(0,w),tension:cue.type==='hat'?Math.max(0,-w):0};
+  if(!cue)return gestureTracks('idle',0);
+  return gestureTracks(cue.type,(now-cue.start)/cue.duration,cue.amplitude,cue.target);
  }
 }

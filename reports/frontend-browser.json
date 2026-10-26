@@ -256,6 +256,10 @@
         "status": "PASS"
       },
       {
+        "name": "staggered lead, tucked elbow, sleeve deformation and weighted lantern: desktop",
+        "status": "PASS"
+      },
+      {
         "name": "continuous salute reaches the brim without changing textures: desktop",
         "status": "PASS"
       },
@@ -269,6 +273,10 @@
       },
       {
         "name": "jointed lantern gesture preserves feet and shovel grip: phone",
+        "status": "PASS"
+      },
+      {
+        "name": "staggered lead, tucked elbow, sleeve deformation and weighted lantern: phone",
         "status": "PASS"
       },
       {

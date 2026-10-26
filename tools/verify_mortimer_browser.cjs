@@ -16,9 +16,10 @@ async function audit(browser,{baseURL,outputDir}){
    await new Promise(resolve=>requestAnimationFrame(resolve));
    const left=point('[data-part=legs]',67.1,493),right=point('[data-part=legs]',310.4,492),spade=point('[data-part=shovel]',90,502);
    const grip=point('[data-part=gripL]',186,316),staff=point('[data-part=shovel]',92,52),pinch=point('[data-part=hatHand]',199,296),brim=point('[data-part=head]',100,202);
-   samples.push({time:performance.now(),hat:rig.state.hat,cue:rig.state.cue,contacts:[left.x,left.y,right.x,right.y,spade.x,spade.y],gripDistance:Math.hypot(grip.x-staff.x,grip.y-staff.y),pinchDistance:Math.hypot(pinch.x-brim.x,pinch.y-brim.y),
+   const ring=point('[data-bone=lantern]',151,14),hand=point('[data-part=gripR]',193,283);
+   samples.push({time:performance.now(),hat:rig.state.hat,lift:rig.state.lift,support:rig.state.support,attention:rig.state.attention,phase:rig.state.gesturePhase,pendant:rig.state.pendant.angle,cue:rig.state.cue,contacts:[left.x,left.y,right.x,right.y,spade.x,spade.y],gripDistance:Math.hypot(grip.x-staff.x,grip.y-staff.y),pinchDistance:Math.hypot(pinch.x-brim.x,pinch.y-brim.y),ringDistance:Math.hypot(ring.x-hand.x,ring.y-hand.y),
     head:root.querySelector('[data-part=head]').getAttribute('transform'),legs:root.querySelector('[data-part=legs]').getAttribute('transform'),spade:root.querySelector('[data-part=shovel]').getAttribute('transform'),fire:root.querySelector('[data-part=fire] path').getAttribute('d'),
-    wrist:{...rig.state.joints.left.wrist},textures:[...root.querySelectorAll('image')].map(im=>im.getAttribute('href'))});
+    wrist:{...rig.state.joints.left.wrist},left:structuredClone(rig.state.joints.left),right:structuredClone(rig.state.joints.right),sleeve:root.querySelector('[data-part=upperR]').children[6].getAttribute('transform'),textures:[...root.querySelectorAll('image')].map(im=>im.getAttribute('href'))});
   }
   return samples;
  },duration);}
@@ -31,18 +32,32 @@ async function audit(browser,{baseURL,outputDir}){
  for(const[name,width,height]of[['desktop',1200,1000],['phone',390,844]]){
   const page=await open({width,height});
   assert.equal(await page.locator('.mortimer-rig image').count(),14);assert.equal(await page.locator('.mortimer-echo').count(),0);
+  assert.equal(await page.locator('[data-deformed=true]').count(),7);
   const idle=await sample(page,900);contactsFixed(idle);assert.ok(new Set(idle.map(s=>s.head)).size>10);assert.ok(new Set(idle.map(s=>s.fire)).size>10);
   assert.ok(idle.every(s=>s.gripDistance<.2),'the hand slid off the planted shovel');
   checks.push({name:'idle head, cloth and fire with fixed painted contacts: '+name,status:'PASS'});
-  await page.click('[data-cue=lantern]');const lamp=await sample(page,2850);contactsFixed(lamp);
+  await page.click('button[data-cue=lantern]');const lamp=await sample(page,3750);contactsFixed(lamp);
   assert.ok(lamp.some(s=>s.cue==='lantern'));assert.ok(lamp.every(s=>s.gripDistance<.25),'lantern lift disturbed the shovel hand');
+  assert.ok(lamp.every(s=>s.ringDistance<.1),'the lantern detached from the hand');
+  assert.ok(lamp.some(s=>s.attention>.01&&Math.abs(s.support)>.01&&Math.abs(s.lift)<.005),'head and shoulder did not lead the hand');
+  assert.ok(lamp.every(s=>s.right.elbow.y>s.right.shoulder.y+120&&Math.abs(s.right.elbow.x-s.right.shoulder.x)<85),'the elbow swung away from the body');
+  const rise=Math.max(...lamp.map(s=>s.right.wrist.y))-Math.min(...lamp.map(s=>s.right.wrist.y));assert.ok(rise>100&&rise<125,'lantern gesture lost its restrained reach');
+  assert.ok(new Set(lamp.map(s=>s.sleeve)).size>15,'sleeve stayed a rigid card');
+  assert.ok(lamp.every(s=>Math.abs(s.pendant)<=.065));
+  assert.ok(lamp.filter(s=>s.phase>.62&&s.phase<.66).some(s=>Math.abs(s.pendant)<.008),'the heavy lantern did not settle during its hold');
   checks.push({name:'jointed lantern gesture preserves feet and shovel grip: '+name,status:'PASS'});
-  await page.click('[data-cue=hat]');const hat=await sample(page,3300);contactsFixed(hat);
+  checks.push({name:'staggered lead, tucked elbow, sleeve deformation and weighted lantern: '+name,status:'PASS'});
+  await page.click('button[data-cue=hat]');const hat=await sample(page,4100);contactsFixed(hat);
   const touching=hat.filter(s=>s.hat>.995);assert.ok(touching.length>0,'hat gesture never reached its contact pose');
   assert.ok(touching.some(s=>s.pinchDistance<2),'fingers did not reach the actual painted hat brim');
   for(let i=1;i<hat.length;i++)if(hat[i].time-hat[i-1].time<70)assert.ok(Math.hypot(hat[i].wrist.x-hat[i-1].wrist.x,hat[i].wrist.y-hat[i-1].wrist.y)<55,'arm jumped between frames');
+  for(let i=1;i<hat.length;i++){
+   const a=hat[i-1],b=hat[i],dt=b.time-a.time;
+   assert.ok(Math.hypot(b.left.wrist.x-b.left.shoulder.x,b.left.wrist.y-b.left.shoulder.y)>80,'salute wrist passed too close to the shoulder');
+   if(dt<70)assert.ok(Math.hypot(b.left.elbow.x-a.left.elbow.x,b.left.elbow.y-a.left.elbow.y)<dt*2,'the elbow whipped around its folding point');
+  }
   checks.push({name:'continuous salute reaches the brim without changing textures: '+name,status:'PASS'});
-  await page.click('[data-cue=look]');const looking=await sample(page,2750);contactsFixed(looking);assert.ok(looking.some(s=>s.cue==='look'));
+  await page.click('button[data-cue=look]');const looking=await sample(page,3300);contactsFixed(looking);assert.ok(looking.some(s=>s.cue==='look'));
   await page.screenshot({path:path.join(outputDir,'mortimer-rig-'+name+'.png'),fullPage:true});
   await page.check('#reduced');await page.waitForTimeout(300);const reduced=await sample(page,500);contactsFixed(reduced);
   assert.equal(new Set(reduced.map(s=>s.head)).size,1);assert.equal(new Set(reduced.map(s=>s.fire)).size,1);
