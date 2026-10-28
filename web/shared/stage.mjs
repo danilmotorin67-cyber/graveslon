@@ -162,11 +162,10 @@ async function overlay(asset,value,label='',counter=false,settings={}){
 bonus=createBonusPresentation(root,{clock,cells,readout,format,text,renderCell:drawCell});
 
 const renderer={
-  skip(){clock.skip();rig.skip();},
-  restore(state){cleanup();rig.restore({resume:state.index>=0});draw(state);options.onRestore?.();},
+  skip(){clock.skip();},
+  restore(state){cleanup();draw(state);options.onRestore?.();},
   async event(event,before,after,{instant}){
     clock.begin(instant);
-    rig.event(event,before,after,{instant:instant||!clock.factor(),cost:options.mode?.()==='bonus'?10000:100});
     const previousScene=event.type==='freeSpinTrigger'?captureScene():null;
     draw(after,{deferReels:['reveal','graveMultiplierUpdate'].includes(event.type),holdBonus:event.type==='freeSpinEnd'});
     options.onEvent?.(event,before,after);

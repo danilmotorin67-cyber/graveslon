@@ -50,7 +50,7 @@ def main():
     result={'status':'PASS','sourceFiles':len(source),'runtimeAssets':len(items),
             'runtimeBytes':sum(a['bytes'] for a in items),'roleCounts':expected,
             'checks':['Source and runtime SHA-256','All 11 GDD symbol codes','Dimensions, formats, real transparency','Full guide art inventory, with three cover drafts'],
-            'visualReview':['All 11 symbols reviewed at 120 px in colour and grayscale','Desktop and portrait static layouts','Legacy poses retained; active character uses 14 articulated parts from two atlases','Base/bonus backgrounds preserve scene layout'],
+            'visualReview':['All 11 symbols reviewed at 120 px in colour and grayscale','Desktop and portrait static layouts','Legacy poses retained; active character uses 13 parts with continuous breathing from two atlases','Base/bonus backgrounds preserve scene layout'],
             'limitations':['Asset integrity report; joint animation and game UI are verified separately','Cover dimensions await the Engine dashboard','Recovered original prompts are unavailable; new rig prompts are retained','Base backgrounds and bonus backgrounds are upscaled exports; source pixels retained'],
             'publication':'File validation does not establish GitHub publication or platform approval'}
     (ROOT/'reports/art-validation.json').write_text(json.dumps(result,indent=2)+'\n')

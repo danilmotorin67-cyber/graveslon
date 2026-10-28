@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {solveArm,boneMatrix,transformPoint,gestureTracks,GESTURES,MortimerReactions} from '../../web/shared/mortimer-motion.mjs';
+import {solveArm,boneMatrix,transformPoint,breathingAt,BREATHING_PERIOD} from '../../web/shared/mortimer-motion.mjs';
 import {triangleMatrix,sleeveWarp,stepPendant} from '../../web/shared/mortimer-deformation.mjs';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-7,`${a} != ${b}`);
 
@@ -25,13 +25,25 @@ test('texture joint matrices map both painted joint centers to the skeleton',()=
   const a=transformPoint(m,from),b=transformPoint(m,to);near(a.x,start.x);near(a.y,start.y);near(b.x,end.x);near(b.y,end.y);
  }
 });
-test('gestures lead with attention and shoulder, hold their target, and return continuously',()=>{
- const early=gestureTracks('lantern',.1);assert.ok(early.attention>0);assert.ok(Math.abs(early.support)>0);assert.equal(early.lift,0);
- for(const t of [.55,.6,.65])near(gestureTracks('lantern',t).lift,1);
- for(const type of ['lantern','look','hat']){
-  for(let i=0;i<=1000;i++)for(const key of ['lift','hat','look','support','salute'])assert.ok(Math.abs(gestureTracks(type,i/1000-1e-6)[key]-gestureTracks(type,i/1000+1e-6)[key])<1e-4);
-  for(const t of [0,1])for(const key of ['lift','hat','look','support','salute'])near(gestureTracks(type,t)[key],0);
+test('breathing loops continuously without a seam or unbounded movement',()=>{
+ for(let i=-100;i<=1000;i++){
+  const t=i/100,b=breathingAt(t),next=breathingAt(t+BREATHING_PERIOD);
+  for(const key of ['chest','shoulders','head','arms','cloth','hips']){
+   assert.ok(b[key]>=0&&b[key]<=1);near(b[key],next[key]);
+   assert.ok(Math.abs(breathingAt(t-1e-6)[key]-breathingAt(t+1e-6)[key])<1e-4);
+  }
  }
+});
+test('heavy breathing has a shorter inhale, a longer exhale and a resting interval',()=>{
+ const samples=Array.from({length:481},(_,i)=>breathingAt(i/100).chest);
+ const rising=samples.findIndex(v=>v>.5)/100,falling=samples.findLastIndex(v=>v>.5)/100;
+ assert.ok(rising<1&&falling>3);
+ for(const t of [4.45,4.6,4.79])near(breathingAt(t).chest,0);
+});
+test('head, arms and cloth follow the chest within the same breath',()=>{
+ const inhale=breathingAt(.8);assert.ok(inhale.chest>inhale.shoulders&&inhale.shoulders>inhale.head&&inhale.arms>inhale.cloth);
+ const exhale=breathingAt(3);assert.ok(exhale.chest<exhale.head&&exhale.arms<exhale.cloth);
+ near(breathingAt(1.65).chest,1);assert.ok(breathingAt(1.65).cloth<breathingAt(1.65).chest);
 });
 test('deformed texture triangles keep all three corners attached to their destination',()=>{
  const source=[{x:0,y:0},{x:384,y:0},{x:0,y:100}],target=[{x:12,y:4},{x:360,y:-5},{x:-8,y:108}];
@@ -42,37 +54,11 @@ test('sleeve deformation bends the silhouette while preserving both joint centre
  for(const p of [a,b]){const q=sleeveWarp(p,a,b,settings);near(p.x,q.x);near(p.y,q.y);}
  const p={x:280,y:350},q=sleeveWarp(p,a,b,settings);assert.ok(Math.hypot(p.x-q.x,p.y-q.y)>2);
 });
-test('the lantern stays bounded during a lift and settles after the hand stops',()=>{
+test('the lantern stays bounded under hand movement and settles after it stops',()=>{
  function simulate(fps){let state=null,max=0,hold=0;for(let i=0;i<=fps*5;i++){
   const t=i/fps,u=Math.min(1,t),s=u*u*u*(u*(u*6-15)+10),point={x:810-30*s,y:560-115*s};
   state=stepPendant(state,point,1/fps);max=Math.max(max,Math.abs(state.angle));if(i===fps*2)hold=Math.abs(state.angle);
  }return{state,max,hold};}
  const a=simulate(60),b=simulate(30);assert.ok(a.max>.002&&a.max<=.065);assert.ok(a.hold<.006);assert.ok(Math.abs(a.state.angle)<.0001);assert.ok(Math.abs(a.max-b.max)<.012);
  assert.equal(stepPendant(a.state,{x:0,y:0},1/60,{reset:true}).angle,0);
-});
-test('repeated small payouts never trigger large arm gestures',()=>{
- const p=new MortimerReactions();
- for(let i=0;i<30;i++){
-  const now=i*500;p.sample(now);p.event({type:'winInfo',totalWin:75},{},{},now);
-  const s=p.sample(now+100);assert.ok(['idle','acknowledge'].includes(s.type));assert.equal(s.lift,0);assert.equal(s.hat,0);
- }
-});
-test('a large-win salute is limited per round and across rapid round restarts',()=>{
- const p=new MortimerReactions(),event={type:'winInfo',totalWin:5000};
- assert.equal(p.event(event,{},{},100),true);p.sample(4000);
- p.event(event,{},{},4500);assert.notEqual(p.sample(4600).type,'hat');
- p.beginRound();p.sample(7000);assert.equal(p.event(event,{},{},7000),false);
- assert.equal(p.event(event,{},{},13000),true);assert.equal(p.sample(13100).type,'hat');
-});
-test('a bonus purchase does not salute a payout below its purchase cost',()=>{
- const p=new MortimerReactions();p.event({type:'winInfo',totalWin:6000},{},{},0,{cost:10000});assert.notEqual(p.sample(100).type,'hat');
- p.sample(2000);assert.equal(p.event({type:'winInfo',totalWin:25000},{},{},3000,{cost:10000}),true);assert.equal(p.sample(3100).type,'hat');
-});
-test('important reactions wait for a gesture return and pending cues clear on skip',()=>{
- const p=new MortimerReactions();p.trigger('lantern',0);
- p.event({type:'winInfo',totalWin:8000},{},{},600);assert.equal(p.sample(1000).type,'lantern');
- const endLantern=GESTURES.lantern.duration+1;assert.equal(p.sample(endLantern).type,'hat');
- p.event({type:'graveMultiplierUpdate',positions:[{reel:2,row:1}],multipliers:[10]},{},{},endLantern+200);
- assert.equal(p.sample(endLantern+300).type,'hat');const endHat=endLantern+GESTURES.hat.duration+1;assert.equal(p.sample(endHat).type,'look');
- p.clear();assert.equal(p.sample(endHat+100).type,'idle');assert.equal(p.queued,null);
 });

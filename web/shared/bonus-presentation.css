@@ -1,9 +1,5 @@
 .scene-transition{z-index:-2!important;pointer-events:none}
 .bonus-overlay-kicker[hidden],.bonus-overlay-emblem[hidden],.bonus-overlay-detail[hidden],.grave-cap-note[hidden]{display:none}
-.mortimer-actor .mortimer-echo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;z-index:3;pointer-events:none;transform-origin:50% 100%}
-.mortimer-actor:after{content:'';position:absolute;left:5%;top:10%;width:70%;height:55%;background:radial-gradient(ellipse,#87b76d33,transparent 68%);opacity:0;z-index:3;pointer-events:none}
-.mortimer-actor[data-reaction=dig]:after,.mortimer-actor[data-reaction=retrigger]:after{opacity:.7}
-.mortimer-actor[data-reaction=win]:after,.mortimer-actor[data-reaction=result]:after{opacity:.7;background:radial-gradient(ellipse,#d1ad6133,transparent 68%)}
 .cell>.grave-bed{position:absolute;left:5%;right:5%;bottom:0;height:29%;z-index:-1;opacity:0;clip-path:polygon(0 42%,10% 17%,25% 24%,38% 0,58% 15%,71% 3%,91% 26%,100% 56%,91% 100%,8% 100%);background:radial-gradient(ellipse at 50% 28%,#8bc27a88,transparent 55%),linear-gradient(180deg,#243d2b,#11191a 50%,#080d12);border-top:2px solid #7da37388;transform-origin:50% 100%}
 .cell.dug>.grave-bed{opacity:1}.cell.dug:before{content:'';position:absolute;inset:4%;border:1px solid #789d6a66;border-radius:12% 12% 5% 5%;pointer-events:none;z-index:-1}
 .cell.dug>.grave-glow{background:radial-gradient(ellipse at 50% 90%,#6a9f5544,transparent 75%),#0a141733}

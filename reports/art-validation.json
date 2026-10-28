@@ -29,7 +29,7 @@
   "visualReview": [
     "All 11 symbols reviewed at 120 px in colour and grayscale",
     "Desktop and portrait static layouts",
-    "Legacy poses retained; active character uses 14 articulated parts from two atlases",
+    "Legacy poses retained; active character uses 13 parts with continuous breathing from two atlases",
     "Base/bonus backgrounds preserve scene layout"
   ],
   "limitations": [

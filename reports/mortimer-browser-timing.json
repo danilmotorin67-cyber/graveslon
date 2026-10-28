@@ -1,5 +1,6 @@
 {
   "status": "PASS",
+  "date": "2026-10-28",
   "cpuThrottle": 4,
   "viewport": {
     "width": 1200,
@@ -7,21 +8,15 @@
   },
   "results": [
     {
-      "cue": "lantern",
-      "sampleFrames": 155,
-      "medianFrameMs": 16.700000000000045,
-      "p95FrameMs": 33.40000000000009,
-      "finite": true,
-      "maxLanternAngle": 0.02377486090340696
-    },
-    {
-      "cue": "hat",
-      "sampleFrames": 238,
+      "cue": "breathing",
+      "sampleFrames": 565,
       "medianFrameMs": 16.699999999999818,
-      "p95FrameMs": 16.700000000000728,
+      "p95FrameMs": 33.299999999999955,
       "finite": true,
-      "maxLanternAngle": 0.007820667576264458
+      "maxLanternAngle": 0.000850312830939736,
+      "minBreath": 0,
+      "maxBreath": 1
     }
   ],
-  "limitation": "Desktop CPU emulation; physical phone not tested. Frame measurements are observations, not a fixed FPS guarantee."
+  "limitation": "Desktop CPU emulation; physical phone not tested. Measurements do not guarantee a fixed FPS."
 }

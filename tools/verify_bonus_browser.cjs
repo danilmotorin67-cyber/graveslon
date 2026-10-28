@@ -51,7 +51,7 @@ async function audit(browser,{baseURL,outputDir}){
   const page=await openLab();const bottom=await page.locator('.mortimer').evaluate(el=>el.getBoundingClientRect().bottom);
   await start(page,source.key,event.index);await page.waitForSelector('.grave-upgrading');
   const tag=await page.locator(`.grave-upgrading[data-multiplier="${level}"] .grave-change`).first().textContent();
-  assert.ok(tag.includes('→ ×'+level));assert.equal(await page.locator('.mortimer-actor').getAttribute('data-reaction'),'dig');
+  assert.ok(tag.includes('→ ×'+level));assert.equal(await page.locator('.mortimer-actor').getAttribute('data-cue'),'breathing');
   assert.ok(Math.abs((await page.locator('.mortimer').evaluate(el=>el.getBoundingClientRect().bottom))-bottom)<1,'the feet must keep the same ground plane');
   clean(await finish(page),source.book.payoutMultiplier);checks.push({name:'visible grave upgrade to ×'+level+' and grounded Mortimer',status:'PASS'});await page.close();
  }
@@ -77,14 +77,14 @@ async function audit(browser,{baseURL,outputDir}){
  const retriggerSource=fixtures.find(s=>s.key==='bonus/retrigger'),retrigger=retriggerSource.book.events.find(e=>e.type==='freeSpinRetrigger');
  const extra=await openLab();await start(extra,retriggerSource.key,retrigger.index);await extra.waitForSelector('#overlay[data-kind=bonus-retrigger]:not([hidden])');
  assert.equal(await extra.locator('#overlay-value').textContent(),'+5');assert.equal(await extra.locator('#feature-counter').getAttribute('data-total'),String(retrigger.totalFs));
- assert.equal(await extra.locator('.mortimer-actor').getAttribute('data-reaction'),'retrigger');assert.equal(await extra.locator('.grave-change').count(),0);
- clean(await finish(extra),retriggerSource.book.payoutMultiplier);checks.push({name:'retrigger +5, updated total and character reaction',status:'PASS'});await extra.close();
+ assert.equal(await extra.locator('.mortimer-actor').getAttribute('data-cue'),'breathing');assert.equal(await extra.locator('.grave-change').count(),0);
+ clean(await finish(extra),retriggerSource.book.payoutMultiplier);checks.push({name:'retrigger +5 and updated total while Mortimer keeps breathing',status:'PASS'});await extra.close();
  // End normally with skip-current-effect; finalWin must not replay a second celebration.
  for(const key of ['base/max_win','bonus/loss']){
   const source=fixtures.find(s=>s.key===key),end=source.book.events.find(e=>e.type==='freeSpinEnd'),page=await openLab();
   await page.evaluate(()=>{window.__overlays=[];let open=false;new MutationObserver(()=>{const el=document.querySelector('#overlay');if(!el.hidden&&!open)window.__overlays.push(el.dataset.kind);open=!el.hidden;}).observe(document.querySelector('#overlay'),{attributes:true});});
   await start(page,key,end.index);await page.waitForSelector('#overlay[data-kind=bonus-result]:not([hidden])');
-  if(end.amount===0)assert.equal(await page.locator('.mortimer-actor').getAttribute('data-cue'),'idle');
+  assert.equal(await page.locator('.mortimer-actor').getAttribute('data-cue'),'breathing');
   assert.equal(await page.locator('.stage').getAttribute('data-bonus'),'active','retain the bonus scene while showing its result');
   await page.evaluate(()=>window.animationLab.player.skip());await page.evaluate(()=>window.__playing);
   assert.deepEqual(await page.evaluate(()=>window.__overlays),['bonus-result']);

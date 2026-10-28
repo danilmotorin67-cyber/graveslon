@@ -198,7 +198,7 @@
         "status": "PASS"
       },
       {
-        "name": "retrigger +5, updated total and character reaction",
+        "name": "retrigger +5 and updated total while Mortimer keeps breathing",
         "status": "PASS"
       },
       {
@@ -248,51 +248,81 @@
     "status": "PASS",
     "checks": [
       {
-        "name": "idle head, cloth and fire with fixed painted contacts: desktop",
+        "name": "continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: desktop",
+        "status": "PASS",
+        "headRisePixels": 6.428126607897866
+      },
+      {
+        "name": "fixed painted soles and shovel, stable grips and no pose changes: desktop",
         "status": "PASS"
       },
       {
-        "name": "jointed lantern gesture preserves feet and shovel grip: desktop",
+        "name": "reduced motion freezes the entire character and resumes its breath: desktop",
         "status": "PASS"
       },
       {
-        "name": "staggered lead, tucked elbow, sleeve deformation and weighted lantern: desktop",
+        "name": "continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: phone",
+        "status": "PASS",
+        "headRisePixels": 5.019218606867071
+      },
+      {
+        "name": "fixed painted soles and shovel, stable grips and no pose changes: phone",
         "status": "PASS"
       },
       {
-        "name": "continuous salute reaches the brim without changing textures: desktop",
+        "name": "reduced motion freezes the entire character and resumes its breath: phone",
         "status": "PASS"
       },
       {
-        "name": "look cue and reduced-motion still frame: desktop",
+        "name": "system reduced-motion preference starts with a static character",
         "status": "PASS"
       },
       {
-        "name": "idle head, cloth and fire with fixed painted contacts: phone",
+        "name": "every supported event type in 10 books leaves the independent character unchanged",
+        "status": "PASS",
+        "coverage": {
+          "books": 10,
+          "events": 463,
+          "types": [
+            "finalWin",
+            "freeSpinEnd",
+            "freeSpinRetrigger",
+            "freeSpinTrigger",
+            "graveMultiplierUpdate",
+            "reveal",
+            "setTotalWin",
+            "setWin",
+            "updateFreeSpin",
+            "winInfo",
+            "wincap"
+          ],
+          "expectedTypes": [
+            "finalWin",
+            "freeSpinEnd",
+            "freeSpinRetrigger",
+            "freeSpinTrigger",
+            "graveMultiplierUpdate",
+            "reveal",
+            "setTotalWin",
+            "setWin",
+            "updateFreeSpin",
+            "winInfo",
+            "wincap"
+          ],
+          "eventAPI": "undefined",
+          "triggerAPI": "undefined"
+        }
+      },
+      {
+        "name": "skip, finish, stop and book restoration do not reset breathing",
         "status": "PASS"
       },
       {
-        "name": "jointed lantern gesture preserves feet and shovel grip: phone",
+        "name": "breathing continues after books and keeps its own speed in turbo",
         "status": "PASS"
       },
       {
-        "name": "staggered lead, tucked elbow, sleeve deformation and weighted lantern: phone",
-        "status": "PASS"
-      },
-      {
-        "name": "continuous salute reaches the brim without changing textures: phone",
-        "status": "PASS"
-      },
-      {
-        "name": "look cue and reduced-motion still frame: phone",
-        "status": "PASS"
-      },
-      {
-        "name": "new rounds preserve the ongoing gesture rather than resetting the body",
-        "status": "PASS"
-      },
-      {
-        "name": "real small-win round keeps one rig and all original texture sources",
+        "name": "real wins, losses, bonus entry and finish never trigger a character reaction",
         "status": "PASS"
       }
     ],
