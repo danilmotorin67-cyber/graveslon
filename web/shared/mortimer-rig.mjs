@@ -96,10 +96,12 @@ export function createMortimerRig(actor,{motionFactor=()=>1}={}){
   const shoulderL=bodyPoint({x:387,y:326}),shoulderR=bodyPoint({x:648,y:333});
   const gripDelta=rotatePoint({x:(PARTS.gripL.grip.x-PARTS.gripL.wrist.x)*leftHandScale,y:(PARTS.gripL.grip.y-PARTS.gripL.wrist.y)*leftHandScale},{x:0,y:0},shovelAngle);
   const wristL={x:staffGrip.x-gripDelta.x,y:staffGrip.y-gripDelta.y};
-  const left=solveArm(shoulderL,wristL,176,185,-1);arm('L',left,b.arms*.12);
+  // Both elbow folds follow the painted sleeves. The opposite pole on the
+  // shovel arm folded it back across the torso instead of down at the side.
+  const left=solveArm(shoulderL,wristL,190,170,1);arm('L',left,b.arms*.12);
   hand('gripL',left.wrist,shovelAngle,leftHandScale);
   const wristR={x:810+hip.x+1.2*b.arms,y:500+hip.y-5*b.arms};
-  const right=solveArm(shoulderR,wristR,180,170,1);arm('R',right,b.arms*.12);
+  const right=solveArm(shoulderR,wristR,180,155,1);arm('R',right,b.arms*.12);
   const rightHand=hand('gripR',right.wrist,-.6*RAD*b.arms,rightHandScale),ringTop=transformPoint(rightHand,PARTS.gripR.grip);
   pendant=stepPendant(pendant,ringTop,dt,{reset:reduced||lastReduced});
   const lampMatrix=rotateMatrix(positioned(ringTop.x-151*lanternScale,ringTop.y-14*lanternScale,lanternScale),ringTop,pendant.angle);

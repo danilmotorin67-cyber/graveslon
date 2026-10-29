@@ -23,7 +23,7 @@ async function audit(browser,{baseURL,outputDir}){
     contacts:[left.x,left.y,right.x,right.y,spade.x,spade.y],gripDistance:Math.hypot(grip.x-staff.x,grip.y-staff.y),ringDistance:Math.hypot(ring.x-hand.x,ring.y-hand.y),
     soleTriangles:[...part('legs').children].slice(-2).map(el=>el.getAttribute('transform')),headY:head.y,chestWidth:chestR.x-chestL.x,
     parts:['head','upperL','foreL','upperR','foreR','coatL','coatR'].map(name=>part(name).getAttribute('transform')),
-    hips:part('legs').firstElementChild.getAttribute('transform'),right:structuredClone(rig.state.joints.right),
+    hips:part('legs').firstElementChild.getAttribute('transform'),left:structuredClone(rig.state.joints.left),right:structuredClone(rig.state.joints.right),
     textures:[...root.querySelectorAll('image')].map(im=>im.getAttribute('href'))});
   }
   return samples;
@@ -44,9 +44,15 @@ async function audit(browser,{baseURL,outputDir}){
    assert.deepEqual(s.soleTriangles,['matrix(1 0 0 1 0 0)','matrix(1 0 0 1 0 0)'],'the painted boot mesh moved');
    assert.ok(s.gripDistance<.25,'the hand left the shovel');assert.ok(s.ringDistance<.1,'the lantern left the fingers');
    assert.deepEqual(s.textures,samples[0].textures,'a texture or whole pose changed');
+   for(const arm of [s.left,s.right]){
+    const upper={x:arm.elbow.x-arm.shoulder.x,y:arm.elbow.y-arm.shoulder.y},fore={x:arm.wrist.x-arm.elbow.x,y:arm.wrist.y-arm.elbow.y};
+    const bend=(upper.x*fore.y-upper.y*fore.x)/(Math.hypot(upper.x,upper.y)*Math.hypot(fore.x,fore.y));
+    assert.ok(bend<-.15,'an elbow folded backwards or crossed the straight-arm limit');
+    assert.ok(upper.y>120&&Math.abs(upper.x)<100,'an elbow flared away from the standing pose');
+   }
   }
   assert.ok(range(samples.map(s=>s.right.wrist.y))<9,'the lantern performed a lift gesture');
-  checks.push({name:'fixed painted soles and shovel, stable grips and no pose changes: '+name,status:'PASS'});
+  checks.push({name:'natural elbow folds throughout breathing, fixed soles and shovel, stable grips: '+name,status:'PASS'});
   await page.screenshot({path:path.join(outputDir,'mortimer-breathing-'+name+'.png'),fullPage:true});
   await page.check('#reduced');await page.waitForTimeout(250);
   const frozen=await page.evaluate(async()=>{const r=window.mortimerLab.rig,svg=r.svg.outerHTML,phase=r.state.phase;await new Promise(resolve=>setTimeout(resolve,450));return{unchanged:svg===r.svg.outerHTML,phase,after:r.state.phase};});

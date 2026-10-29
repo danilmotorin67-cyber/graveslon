@@ -253,7 +253,7 @@
         "headRisePixels": 6.428126607897866
       },
       {
-        "name": "fixed painted soles and shovel, stable grips and no pose changes: desktop",
+        "name": "natural elbow folds throughout breathing, fixed soles and shovel, stable grips: desktop",
         "status": "PASS"
       },
       {
@@ -263,10 +263,10 @@
       {
         "name": "continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: phone",
         "status": "PASS",
-        "headRisePixels": 5.019218606867071
+        "headRisePixels": 5.019222145892854
       },
       {
-        "name": "fixed painted soles and shovel, stable grips and no pose changes: phone",
+        "name": "natural elbow folds throughout breathing, fixed soles and shovel, stable grips: phone",
         "status": "PASS"
       },
       {
