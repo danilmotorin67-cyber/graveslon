@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: desktop",
+      "status": "PASS",
+      "headRisePixels": 6.428107345042605,
+      "cycleSeconds": 3.0000999999940396
+    },
+    {
+      "name": "natural elbow folds throughout breathing, fixed soles and shovel, stable grips: desktop",
+      "status": "PASS"
+    },
+    {
+      "name": "reduced motion freezes the entire character and resumes its breath: desktop",
+      "status": "PASS"
+    },
+    {
+      "name": "continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: phone",
+      "status": "PASS",
+      "headRisePixels": 5.019207105033274,
+      "cycleSeconds": 3.0499000000059606
+    },
+    {
+      "name": "natural elbow folds throughout breathing, fixed soles and shovel, stable grips: phone",
+      "status": "PASS"
+    },
+    {
+      "name": "reduced motion freezes the entire character and resumes its breath: phone",
+      "status": "PASS"
+    },
+    {
+      "name": "system reduced-motion preference starts with a static character",
+      "status": "PASS"
+    },
+    {
+      "name": "every supported event type in 10 books leaves the independent character unchanged",
+      "status": "PASS",
+      "coverage": {
+        "books": 10,
+        "events": 463,
+        "types": [
+          "finalWin",
+          "freeSpinEnd",
+          "freeSpinRetrigger",
+          "freeSpinTrigger",
+          "graveMultiplierUpdate",
+          "reveal",
+          "setTotalWin",
+          "setWin",
+          "updateFreeSpin",
+          "winInfo",
+          "wincap"
+        ],
+        "expectedTypes": [
+          "finalWin",
+          "freeSpinEnd",
+          "freeSpinRetrigger",
+          "freeSpinTrigger",
+          "graveMultiplierUpdate",
+          "reveal",
+          "setTotalWin",
+          "setWin",
+          "updateFreeSpin",
+          "winInfo",
+          "wincap"
+        ],
+        "eventAPI": "undefined",
+        "triggerAPI": "undefined"
+      }
+    },
+    {
+      "name": "skip, finish, stop and book restoration do not reset breathing",
+      "status": "PASS"
+    },
+    {
+      "name": "breathing continues after books and keeps its own speed in turbo",
+      "status": "PASS"
+    },
+    {
+      "name": "real wins, losses, bonus entry and finish never trigger a character reaction",
+      "status": "PASS"
+    }
+  ],
+  "consoleErrors": [],
+  "legacyCharacterRequests": []
+}

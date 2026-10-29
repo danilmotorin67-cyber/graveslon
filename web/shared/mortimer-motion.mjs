@@ -3,19 +3,20 @@ export const RAD=Math.PI/180;
 export const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 export const mix=(a,b,t)=>a+(b-a)*t;
 export function smooth(t){t=clamp(t,0,1);return t*t*(3-2*t);}
-export const BREATHING_PERIOD=4.8;
+const INHALE=1,HOLD=.1,EXHALE=1.65,REST=.25;
+export const BREATHING_PERIOD=INHALE+HOLD+EXHALE+REST;
 const ease=t=>{t=clamp(t,0,1);return clamp(t*t*t*(t*(t*6-15)+10),0,1);};
 function breath(time){
  const t=((time%BREATHING_PERIOD)+BREATHING_PERIOD)%BREATHING_PERIOD;
- if(t<1.55)return ease(t/1.55);
- if(t<1.75)return 1;
- if(t<4.4)return 1-ease((t-1.75)/2.65);
+ if(t<INHALE)return ease(t/INHALE);
+ if(t<INHALE+HOLD)return 1;
+ if(t<INHALE+HOLD+EXHALE)return 1-ease((t-INHALE-HOLD)/EXHALE);
  return 0;
 }
 export function breathingAt(time){
  return{phase:((time%BREATHING_PERIOD)+BREATHING_PERIOD)%BREATHING_PERIOD/BREATHING_PERIOD,
-  chest:breath(time),shoulders:breath(time-.1),head:breath(time-.18),
-  arms:breath(time-.16),cloth:breath(time-.28),hips:breath(time-.12)};
+  chest:breath(time),shoulders:breath(time-.06),head:breath(time-.11),
+  arms:breath(time-.1),cloth:breath(time-.175),hips:breath(time-.075)};
 }
 export function rotatePoint(p,pivot,angle){const c=Math.cos(angle),s=Math.sin(angle),x=p.x-pivot.x,y=p.y-pivot.y;return{x:pivot.x+x*c-y*s,y:pivot.y+x*s+y*c};}
 export function transformPoint(m,p){return{x:m[0]*p.x+m[2]*p.y+m[4],y:m[1]*p.x+m[3]*p.y+m[5]};}

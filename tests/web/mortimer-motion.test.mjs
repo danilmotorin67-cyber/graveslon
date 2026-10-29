@@ -35,15 +35,15 @@ test('breathing loops continuously without a seam or unbounded movement',()=>{
  }
 });
 test('heavy breathing has a shorter inhale, a longer exhale and a resting interval',()=>{
- const samples=Array.from({length:481},(_,i)=>breathingAt(i/100).chest);
- const rising=samples.findIndex(v=>v>.5)/100,falling=samples.findLastIndex(v=>v>.5)/100;
- assert.ok(rising<1&&falling>3);
- for(const t of [4.45,4.6,4.79])near(breathingAt(t).chest,0);
+ const samples=Array.from({length:501},(_,i)=>breathingAt(i/500*BREATHING_PERIOD).chest);
+ const rising=samples.findIndex(v=>v>.5)/500,falling=samples.findLastIndex(v=>v>.5)/500;
+ assert.ok(rising<.25&&falling>.6);
+ for(const phase of [.94,.96,.999])near(breathingAt(phase*BREATHING_PERIOD).chest,0);
 });
 test('head, arms and cloth follow the chest within the same breath',()=>{
- const inhale=breathingAt(.8);assert.ok(inhale.chest>inhale.shoulders&&inhale.shoulders>inhale.head&&inhale.arms>inhale.cloth);
- const exhale=breathingAt(3);assert.ok(exhale.chest<exhale.head&&exhale.arms<exhale.cloth);
- near(breathingAt(1.65).chest,1);assert.ok(breathingAt(1.65).cloth<breathingAt(1.65).chest);
+ const inhale=breathingAt(BREATHING_PERIOD/6);assert.ok(inhale.chest>inhale.shoulders&&inhale.shoulders>inhale.head&&inhale.arms>inhale.cloth);
+ const exhale=breathingAt(BREATHING_PERIOD*.625);assert.ok(exhale.chest<exhale.head&&exhale.arms<exhale.cloth);
+ const hold=breathingAt(BREATHING_PERIOD*.34375);near(hold.chest,1);assert.ok(hold.cloth<hold.chest);
 });
 test('deformed texture triangles keep all three corners attached to their destination',()=>{
  const source=[{x:0,y:0},{x:384,y:0},{x:0,y:100}],target=[{x:12,y:4},{x:360,y:-5},{x:-8,y:108}];

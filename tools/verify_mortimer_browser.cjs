@@ -32,13 +32,17 @@ async function audit(browser,{baseURL,outputDir}){
  for(const[name,width,height]of[['desktop',1200,1000],['phone',390,844]]){
   const page=await open({width,height});
   assert.equal(await page.locator('.mortimer-rig image').count(),13);assert.equal(await page.locator('[data-part=hatHand],button[data-cue],.mortimer-echo').count(),0);
-  const samples=await sample(page,5600);assert.ok(samples.length>60);
+  const samples=await sample(page,6500);assert.ok(samples.length>60);
   assert.ok(samples.every(s=>s.cue==='breathing'));assert.ok(range(samples.map(s=>s.breath))>.98);
   for(let i=0;i<7;i++)assert.ok(new Set(samples.map(s=>s.parts[i])).size>10,'a body part stayed motionless');
   assert.ok(new Set(samples.map(s=>s.hips)).size>10,'the hips did not follow the breath');
   const headRise=range(samples.map(s=>s.headY));assert.ok(headRise>(name==='desktop'?3:1)&&headRise<(name==='desktop'?10:8),name+' breathing became invisible or excessive: '+headRise);
   assert.ok(range(samples.map(s=>s.chestWidth))>(name==='desktop'?.5:.15),'the chest did not expand');
-  checks.push({name:'continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: '+name,status:'PASS',headRisePixels:headRise});
+  const inhales=samples.filter((s,i)=>i>0&&samples[i-1].breath<.5&&s.breath>=.5);
+  assert.ok(inhales.length>=2,'fewer than two breaths in the sampling window');
+  const cycleSeconds=(inhales[1].time-inhales[0].time)/1000;
+  assert.ok(cycleSeconds>2.8&&cycleSeconds<3.2,'breathing did not use the shorter three-second cycle: '+cycleSeconds);
+  checks.push({name:'continuous heavy breathing moves chest, shoulders, head, arms, hips and cloth: '+name,status:'PASS',headRisePixels:headRise,cycleSeconds});
   for(const s of samples){
    for(let i=0;i<6;i++)assert.ok(Math.abs(s.contacts[i]-samples[0].contacts[i])<.01,'a sole or shovel tip moved');
    assert.deepEqual(s.soleTriangles,['matrix(1 0 0 1 0 0)','matrix(1 0 0 1 0 0)'],'the painted boot mesh moved');
